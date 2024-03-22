@@ -65,6 +65,7 @@ dkms.conf
 *.sch-bak
 *~
 ~*.lck
+.~lock*
 _autosave-*
 *.tmp
 *-save.pro

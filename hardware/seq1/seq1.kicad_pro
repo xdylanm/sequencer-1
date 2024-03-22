@@ -385,6 +385,10 @@
     [
       "8ddbd4cb-c9ed-4e84-b41b-81a0645f4a34",
       "Root"
+    ],
+    [
+      "98daf2c7-a8ec-423c-aff8-94f5850ea06e",
+      "seq1-alt-mcu"
     ]
   ],
   "text_variables": {}
