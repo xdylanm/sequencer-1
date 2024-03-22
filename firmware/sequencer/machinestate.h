@@ -38,10 +38,17 @@ public:
 
   void push(int ich, uint16_t pot_val, int step_val, int run_val, int mode_val);
 
-  int next_step(int ki);
-  uint16_t quant_cv(int i) const;
+  int next_step(int ki);            // advance to ki, compute next ki
+  uint16_t quant_cv(int i) const;   // report quantized CV
 
-  void process_key_events();
+  void process_key_events();        // process keys and update state
+
+  uint32_t pixel_color(int i) const {
+    if (i >= 0 && i < MAX_NUM_STEPS) {
+      return pixel_wrgb_[i];
+    }
+    return 0;
+  }  
 
 
 private:
@@ -50,8 +57,8 @@ private:
   uint32_t r_state_;  // state for random interval counter
   int octave_shift_;  // transpose by octave
   
-  uint16_t cv_[MAX_NUM_STEPS];    
-
+  uint16_t cv_[MAX_NUM_STEPS];   
+  uint32_t pixel_wrgb_[MAX_NUM_STEPS]; 
 
 };
 

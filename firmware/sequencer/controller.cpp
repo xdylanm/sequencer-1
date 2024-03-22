@@ -7,14 +7,16 @@ Controller::Controller()
 
 }
 
-void Controller::tick(int ich, uint16_t pot_val, int step_val, int run_val, int mode_val) 
+bool Controller::tick(int ich, uint16_t pot_val, int step_val, int run_val, int mode_val) 
 {
+  bool new_interval = false;
   if (state_.running) {
     ++mi_;
     if (mi_ >= tpi_) {
       ki_ = ki_next_; 
       ki_next_ = state_.next_step(ki_next_);
       mi_ = 0;
+      new_interval = true;
     }
 
     // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
@@ -41,6 +43,7 @@ void Controller::tick(int ich, uint16_t pot_val, int step_val, int run_val, int 
   } 
 
   state_.push(ich, pot_val, step_val, run_val, mode_val);
+  return new_interval;
 }
 
 void Controller::duty(int d) 

@@ -9,7 +9,7 @@ public:
 
   Controller();
 
-  void tick(int ich, uint16_t pot_val, int step_val, int run_val, int mode_val);
+  bool tick(int ich, uint16_t pot_val, int step_val, int run_val, int mode_val);
   
   uint8_t next() const 
   {
@@ -65,6 +65,9 @@ public:
   }
 
   void bpm(int b);
+
+  MachineState&       state()       { return state_; }
+  MachineState const& state() const { return state_; }
 
 private:
 

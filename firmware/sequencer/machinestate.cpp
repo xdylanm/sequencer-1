@@ -1,5 +1,9 @@
 #include "machinestate.h"
 
+#define WHITE_BYTE_POS 24
+#define RED_BYTE_POS 16
+#define GREEN_BYTE_POS 8
+#define BLUE_BYTE_POS 0
 
 namespace {
   void xorshift32(uint32_t& x) 
@@ -14,7 +18,7 @@ namespace {
 MachineState::MachineState()
 : quant(Quantization::NONE), voct_range(OutputRange::VOCT_1), pattern(PatternMode::LOOP),
   step_button_mode(StepButtonMode::STEP_ACTIVE), run_button(32, SoftButton::ACTIVE_LOW), 
-  mode_button(32, SoftButton::ACTIVE_LOW), running(false), tick_freq(2000), bpm(100), 
+  mode_button(32, SoftButton::ACTIVE_LOW), running(false), tick_freq(2000), bpm(60), 
   duty_pct(50), slide_pct(0), bounce_dir_(1), r_state_(2), octave_shift_(0)
 {
 
@@ -24,6 +28,7 @@ MachineState::MachineState()
     step_active[i] = 1;
     step_enable[i] = 1;
     cv_[i] = 0;    
+    pixel_wrgb_[i] = 0ul;
   }
 }
 
@@ -37,6 +42,11 @@ void MachineState::push(int ich, uint16_t pot_val, int step_val, int run_val, in
 
 int MachineState::next_step(int ki) 
 {
+  for (int i = 0; i < MAX_NUM_STEPS; ++i) {
+    pixel_wrgb_[i] &= 0x00FFFFFF;   // mask off white
+  }
+  pixel_wrgb_[ki] |= (0x08 << WHITE_BYTE_POS);
+
   switch (pattern) {
   case LOOP:
     do {
@@ -60,6 +70,7 @@ int MachineState::next_step(int ki)
     } while(!step_enable[ki]);
     break;
   }
+  
   return ki;
 }
 
@@ -108,11 +119,26 @@ struct key_states_def
 
 void MachineState::process_key_events()
 {
-  if (run_button.event() == SoftButton::EVENT_KEY_DOWN) {
+  SoftButton::ButtonEvent const run_event = run_button.event();
+  if (run_event == SoftButton::EVENT_KEY_DOWN) {
     key_states.modifier = key_states_def::RUNSTOP;
-  } else if (run_button.event() == SoftButton::EVENT_KEY_UP) {
+  } else if (run_event == SoftButton::EVENT_KEY_UP) {
     if (!key_states.applied_runstop_modifier) { // tap
       running = !running; // toggle run/pause if tap
+      if (running) {
+        for (int i = 0; i < MAX_NUM_STEPS; ++i) {
+          if (step_enable[i]) {
+            uint8_t const val = step_active[i] ? 0x08 : 0x03;
+            pixel_wrgb_[i] = (val << RED_BYTE_POS) | (val << BLUE_BYTE_POS);
+          } else {
+            pixel_wrgb_[i] = 0;
+          }
+        }
+      } else {
+        for (int i = 0; i < MAX_NUM_STEPS; ++i) {
+          pixel_wrgb_[i] = 0;
+        }
+      }
       // TODO reset random seed
     }
     if (key_states.modifier == key_states_def::RUNSTOP) { // remove modifier
@@ -120,10 +146,11 @@ void MachineState::process_key_events()
       key_states.applied_runstop_modifier = false;
     }
   }
-
-  if (mode_button.event() == SoftButton::EVENT_KEY_DOWN) {
+  
+  SoftButton::ButtonEvent const mode_event = mode_button.event();
+  if (mode_event == SoftButton::EVENT_KEY_DOWN) {
     key_states.modifier = key_states_def::MODE;
-  } else if (mode_button.event() == SoftButton::EVENT_KEY_UP) {
+  } else if (mode_event == SoftButton::EVENT_KEY_UP) {
     if (!key_states.applied_mode_modifier) { // tap
       if (step_button_mode == StepButtonMode::STEP_ACTIVE) {
         step_button_mode = StepButtonMode::STEP_ENABLE;

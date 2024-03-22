@@ -70,7 +70,7 @@ int const addr_pins[] = {PAX_MUX_ADDR0, PAX_MUX_ADDR1, PAX_MUX_ADDR2};
 Controller engine;
 
 volatile int ch_ndx, next_ch_ndx;
-volatile uint16_t ch0_val;
+volatile bool new_interval;
 
 // main timing for the engine comes from the conversion interrupts
 void ADC_Handler() 
@@ -79,23 +79,20 @@ void ADC_Handler()
   uint16_t const pot_val_raw = 0x0FFF & ADC->RESULT.reg;
   int const step_key_raw = iopin_digital_read(PAX_MUXD_STEP_BUTTON);   // active high
   
-  if (ch_ndx == 0) {
-    ch0_val = pot_val_raw > 0 ? pot_val_raw : 1;
-  }
-
   // should be OK to switch the MUX in between: settle time << sample time
   iopin_digital_write(addr_pins[mux_addr_gray_table[2*next_ch_ndx]], mux_addr_gray_table[2*next_ch_ndx + 1]);
-  /*  
+
   // write the active CV & gate levels out
   analogWrite(PIN_CV_DAC_OUT, engine.cv());
   digitalWrite(PIN_GATE_OUT, engine.gate());
 
   int const run_stop_raw = digitalRead(PIN_RUN_STOP_BUTTON);
   int const mode_raw = digitalRead(PIN_MODE_BUTTON);
-  engine.tick(ch_ndx, pot_val_raw, step_key_raw, run_stop_raw, mode_raw);
-  */
+  new_interval |= engine.tick(ch_ndx, pot_val_raw, step_key_raw, run_stop_raw, mode_raw);
+  engine.state().process_key_events();
+
   ch_ndx = next_ch_ndx;
-  next_ch_ndx = (next_ch_ndx + 1) % 8;
+  next_ch_ndx = (next_ch_ndx + 1) % MAX_NUM_STEPS;
 
   ADC->INTFLAG.bit.RESRDY = 1;  // write a bit to clear interrupt
 
@@ -111,8 +108,6 @@ void error_blink(int i) {
       delay(400);
   }
 }
-
-int buttons_tmp[8];
 
 void setup() {
   Serial.begin(115200);
@@ -168,14 +163,15 @@ void setup() {
 
   ch_ndx = 0;
   next_ch_ndx = 1;
-  for (int i = 0; i < 8; ++i) {
-    buttons_tmp[i] = 0;
-  }
 
+  engine.tick_freq(2000);
+  engine.duty(50);
+  engine.slide(10);
+  engine.bpm(60);
+    
   iopin_digital_write(PAX_MUX_ADDR0,0);
   iopin_digital_write(PAX_MUX_ADDR1,0);
   iopin_digital_write(PAX_MUX_ADDR2,0);
-
 
   start_ADC();
 }
@@ -183,6 +179,15 @@ void setup() {
 void loop() 
 {
 
+  if (new_interval) {
+    new_interval = false;
+    for (int i = 0; i < MAX_NUM_STEPS; ++i) {
+      status_pixels.setPixelColor(i, engine.state().pixel_color(i));
+    }
+    status_pixels.show();
+  }
+
+/*
   if (ch0_val > 0) {
     //Serial.println(ch0_val);
     uint16_t lvl = ((ch0_val >> 9) & 0x0007) + 1; // 12 bits >> 9 bits = 3 bits ==> 0-7
@@ -196,7 +201,7 @@ void loop()
     }
     status_pixels.show();
   }
-
+*/
 
   /*
   int const step_key_raw = iopin_digital_read(PAX_MUXD_STEP_BUTTON);   // active low
