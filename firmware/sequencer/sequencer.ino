@@ -3,6 +3,7 @@
 #include <Adafruit_NeoPixel_ZeroDMA.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h> 
+#include "seqdisplay.h"
 #include "controller.h"
 #include "port_util.h"
 #include "gclk_util.h"
@@ -30,11 +31,10 @@
 #define PAX_MUX_ADDR2 23
 
 // Display definitions
-#define OLED_RESET -1
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define SCREEN_ADDRESS 0x3C 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+SeqDisplay display(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_ADDRESS);
 
 // create a status pixel strand with 8 pixels
 Adafruit_NeoPixel_ZeroDMA status_pixels(8, PIN_STATUS_NEOPIXELS, NEO_GRBW + NEO_KHZ800);
@@ -148,18 +148,15 @@ void setup() {
   status_pixels.clear();
   status_pixels.show();
   
-  if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+  if (!display.begin()) {
     Serial.println("Display initialization failed");
     error_blink(0);
   }
-    // Show initial display buffer contents on the screen --
-  // the library initializes this with an Adafruit splash screen.
-  display.display();
+  display.set_bpm(218);
+  display.set_duty(69);
+  display.display_status();
   delay(2000); // Pause for 2 seconds
-
-  // Clear the buffer
-  display.clearDisplay();
-  display.display();
+  
 
   ch_ndx = 0;
   next_ch_ndx = 1;
