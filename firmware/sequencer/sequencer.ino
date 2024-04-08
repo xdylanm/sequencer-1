@@ -155,6 +155,7 @@ void setup() {
     Serial.println("Display initialization failed");
     error_blink(0);
   }
+  delay(500);
   for (int i = 0; i < 13; ++i) {
     display.display_title("SEQUENCER-1", i);
     delay(50);
@@ -194,7 +195,7 @@ void setup() {
   iopin_digital_write(PAX_MUX_ADDR1,0);
   iopin_digital_write(PAX_MUX_ADDR2,0);
 
-  update_npxls = false;
+  update_npxls = true;
   update_display = true;  // one shot
 
   start_ADC();
@@ -209,6 +210,12 @@ void loop()
       status_pixels.setPixelColor(i, seq_state.pixel_color(i));
     }
     status_pixels.show();
+
+    display.set_main_level_chart(8, seq_state.cv_buf(), seq_state.step_active_buf(), seq_state.step_enable_buf());
+    if (seq_state.running()) {
+      display.set_main_level_bar(seq_state.current_step());
+    }
+    display.show();
   }
 
   if (update_display) {
@@ -266,7 +273,7 @@ void loop()
 
     update_display = false;
 
-    display.display_status();
+    display.show();
 
   }
 

@@ -25,10 +25,13 @@ public:
 
   void set_mode_sel(const char* q);
 
-  void display_status();
-
   void select_top(int index);
   void activate_top(int index);
+
+  void set_main_level_chart(int N, uint16_t const* cv, uint8_t const* active, uint8_t const* enabled);
+  void set_main_level_bar(int step);
+
+  void show();
 
 private:
   GFXcanvas1 title_canvas_;
@@ -40,6 +43,7 @@ private:
   GFXcanvas1 mode_sel_canvas_;
   GFXcanvas1 voct_canvas_;
   GFXcanvas1 select_canvas_;
+  GFXcanvas1 main_canvas_;
   
   Adafruit_SSD1306 display_;
   int addr_;

@@ -33,7 +33,7 @@ int int2str3_centered(char* buf, GFXcanvas1& canvas, int num, int w_max)
 SeqDisplay::SeqDisplay(int w /*=128*/, int h /*=64 */, int addr /*=0x3C*/)
 : title_canvas_(w, 16), bpm_canvas_(19, 16), duty_canvas_(19, 16), slide_canvas_(19,16),  
   pattern_canvas_(19,16), quant_canvas_(19,16), mode_sel_canvas_(19,16), voct_canvas_(12,16), 
-  select_canvas_(w, 4), display_(w, h, &Wire, OLED_RESET), addr_(addr)
+  select_canvas_(w, 4), main_canvas_(w,88), display_(w, h, &Wire, OLED_RESET), addr_(addr)
 {
   xoff_top_[0] = XOFF_BPM;
   xoff_top_[1] = XOFF_DUTY;
@@ -84,7 +84,8 @@ bool SeqDisplay::begin()
   if(!display_.begin(SSD1306_SWITCHCAPVCC, addr_)) {
     return false;
   }
-  clear_all();
+  display_.clearDisplay(); 
+  display_.display(); 
 }
 
 void SeqDisplay::clear_all()
@@ -117,6 +118,9 @@ void SeqDisplay::set_bpm(int bpm)
   int const xoff = int2str3_centered(&buf[0], bpm_canvas_, bpm, 17);
   bpm_canvas_.setCursor(1 + xoff, 15);
   bpm_canvas_.println(buf);
+
+  display_.drawBitmap(XOFF_BPM,0,bpm_canvas_.getBuffer(),bpm_canvas_.width(),bpm_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
 }
 
 void SeqDisplay::set_duty(int duty)
@@ -144,6 +148,10 @@ void SeqDisplay::set_duty(int duty)
   int const xoff = int2str3_centered(&buf[0], duty_canvas_, duty, 17);
   duty_canvas_.setCursor(1 + xoff, 15);
   duty_canvas_.println(buf);
+
+  display_.drawBitmap(XOFF_DUTY,0,duty_canvas_.getBuffer(),duty_canvas_.width(),duty_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+
 }
 
 void SeqDisplay::set_slide(int slide)
@@ -171,6 +179,10 @@ void SeqDisplay::set_slide(int slide)
   int const xoff = int2str3_centered(&buf[0], slide_canvas_, slide, 17);
   slide_canvas_.setCursor(1 + xoff, 15);
   slide_canvas_.println(buf);
+
+  display_.drawBitmap(XOFF_SLIDE,0,slide_canvas_.getBuffer(),slide_canvas_.width(),slide_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+
 }
 
 void SeqDisplay::set_pattern(int const pat) 
@@ -192,6 +204,10 @@ void SeqDisplay::set_pattern(int const pat)
     pattern_canvas_.setCursor(1, 15);
     pattern_canvas_.println("RND");
   }
+
+  display_.drawBitmap(XOFF_PATTERN,0,pattern_canvas_.getBuffer(),pattern_canvas_.width(),pattern_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+
 }
 
 void SeqDisplay::set_quant(const char* q) 
@@ -202,6 +218,10 @@ void SeqDisplay::set_quant(const char* q)
   quant_canvas_.drawFastHLine(1, 8, 17, SSD1306_WHITE);
   quant_canvas_.setCursor(1, 15);
   quant_canvas_.println(q);
+
+  display_.drawBitmap(XOFF_QUANT,0,quant_canvas_.getBuffer(),quant_canvas_.width(),quant_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+
 }
 
 void SeqDisplay::set_mode_sel(const char* q) 
@@ -212,6 +232,10 @@ void SeqDisplay::set_mode_sel(const char* q)
   mode_sel_canvas_.drawFastHLine(1, 8, 17, SSD1306_WHITE);
   mode_sel_canvas_.setCursor(1, 15);
   mode_sel_canvas_.println(q);
+
+  display_.drawBitmap(XOFF_MODE_SEL,0,mode_sel_canvas_.getBuffer(),mode_sel_canvas_.width(),mode_sel_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+
 }
 
 void SeqDisplay::set_voct(int imin, int span)
@@ -227,6 +251,10 @@ void SeqDisplay::set_voct(int imin, int span)
     int const y0 = 13 - 3*(i+imin);
     voct_canvas_.drawRect(2, y0, 9, 3, SSD1306_WHITE);
   }
+
+  display_.drawBitmap(XOFF_VOCT,0,voct_canvas_.getBuffer(),voct_canvas_.width(),voct_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+
  
 }
 
@@ -243,6 +271,10 @@ void SeqDisplay::select_top(int const index)
   int const w =  xoff_top_[index+1] - xoff_top_[index] - 2;
   select_canvas_.drawFastHLine(x0, 0, w, SSD1306_WHITE);
   select_canvas_.drawFastHLine(x0, 1, w, SSD1306_WHITE);
+
+  display_.drawBitmap(0,16,select_canvas_.getBuffer(),select_canvas_.width(),select_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+
 }
 
 void SeqDisplay::activate_top(int const index)
@@ -268,27 +300,62 @@ void SeqDisplay::activate_top(int const index)
   
   select_canvas_.drawFastHLine(x0-2, 2, 5, SSD1306_WHITE);
   select_canvas_.drawFastHLine(x0-3, 3, 7, SSD1306_WHITE);
+
+  display_.drawBitmap(0,16,select_canvas_.getBuffer(),select_canvas_.width(),select_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
   
 }
 
-void SeqDisplay::display_status()
+void SeqDisplay::show()
 {
-  display_.drawBitmap(XOFF_BPM,0,bpm_canvas_.getBuffer(),bpm_canvas_.width(),bpm_canvas_.height(),
-      SSD1306_WHITE,SSD1306_BLACK);
-  display_.drawBitmap(XOFF_DUTY,0,duty_canvas_.getBuffer(),duty_canvas_.width(),duty_canvas_.height(),
-      SSD1306_WHITE,SSD1306_BLACK);
-  display_.drawBitmap(XOFF_SLIDE,0,slide_canvas_.getBuffer(),slide_canvas_.width(),slide_canvas_.height(),
-      SSD1306_WHITE,SSD1306_BLACK);
-  display_.drawBitmap(XOFF_PATTERN,0,pattern_canvas_.getBuffer(),pattern_canvas_.width(),pattern_canvas_.height(),
-    SSD1306_WHITE,SSD1306_BLACK);
-  display_.drawBitmap(XOFF_QUANT,0,quant_canvas_.getBuffer(),quant_canvas_.width(),quant_canvas_.height(),
-    SSD1306_WHITE,SSD1306_BLACK);
-  display_.drawBitmap(XOFF_MODE_SEL,0,mode_sel_canvas_.getBuffer(),mode_sel_canvas_.width(),mode_sel_canvas_.height(),
-    SSD1306_WHITE,SSD1306_BLACK);
-  display_.drawBitmap(XOFF_VOCT,0,voct_canvas_.getBuffer(),voct_canvas_.width(),voct_canvas_.height(),
-    SSD1306_WHITE,SSD1306_BLACK);
-  display_.drawBitmap(0,16,select_canvas_.getBuffer(),select_canvas_.width(),select_canvas_.height(),
-    SSD1306_WHITE,SSD1306_BLACK);
   display_.display();
 }
+
+
+void SeqDisplay::set_main_level_chart(int N, uint16_t const* cv, uint8_t const* active, uint8_t const* enabled)
+{
+  if (N != 8) {
+    return;
+  }
+  int const y_off = main_canvas_.height()/2; 
+  uint32_t const hy_max = main_canvas_.height()/2 - 4;
+  int const y_bottom = y_off + hy_max + 1;  // y_off + 2 + hy_max - 1;
+
+  main_canvas_.fillScreen(SSD1306_BLACK);
+  for (int i = 0; i < N; ++i) {
+    if (enabled[i]) {
+      main_canvas_.drawRect(2 + i*16, y_off + 2, 12, hy_max-1, SSD1306_WHITE);
+      uint32_t const hy = ((uint32_t)cv[i] * hy_max + 1024)/2048;
+      int const y0 = y_bottom - hy + 2;
+      if (active[i]) {
+        main_canvas_.fillRect(2 + i*16, y0, 12, hy-1, SSD1306_WHITE);
+      } else {
+        main_canvas_.drawFastHLine(2 + i*16, y0, 12, SSD1306_WHITE);
+      }
+    } else {
+      main_canvas_.drawFastHLine(2 + i*16, y_bottom, 12, SSD1306_WHITE);
+    }
+  }
+
+  uint8_t* pstart = main_canvas_.getBuffer() + (y_off*main_canvas_.width())/8;
+  display_.drawBitmap(0,20,pstart,main_canvas_.width(),main_canvas_.height()/2 - 1,
+    SSD1306_WHITE,SSD1306_BLACK);
+}
+
+void SeqDisplay::set_main_level_bar(int const step)
+{
+  int const y_off = main_canvas_.height()-1; 
+  main_canvas_.drawFastHLine(0, y_off, main_canvas_.width(), SSD1306_BLACK);
+  if (step < 0) {
+    return;
+  }
+  main_canvas_.drawFastHLine(2 + step*16, y_off, 12, SSD1306_WHITE);
+
+  uint8_t* pstart = main_canvas_.getBuffer() + (y_off*main_canvas_.width())/8;
+  display_.drawBitmap(0,63,pstart,main_canvas_.width(),1,
+    SSD1306_WHITE,SSD1306_BLACK);
+
+}
+
+
 
