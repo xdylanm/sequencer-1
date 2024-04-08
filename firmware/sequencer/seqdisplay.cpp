@@ -9,7 +9,8 @@
 #define XOFF_SLIDE 39
 #define XOFF_PATTERN 58
 #define XOFF_QUANT 77
-#define XOFF_VOCT 117
+#define XOFF_MODE_SEL 96
+#define XOFF_VOCT 115
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library. 
@@ -30,17 +31,22 @@ int int2str3_centered(char* buf, GFXcanvas1& canvas, int num, int w_max)
 
 
 SeqDisplay::SeqDisplay(int w /*=128*/, int h /*=64 */, int addr /*=0x3C*/)
-: bpm_canvas_(19, 16), duty_canvas_(19, 16), slide_canvas_(19,16),  pattern_canvas_(19,16),
-  quant_canvas_(39,16), voct_canvas_(12,16), select_canvas_(w, 4), 
-  display_(w, h, &Wire, OLED_RESET), addr_(addr)
+: title_canvas_(w, 16), bpm_canvas_(19, 16), duty_canvas_(19, 16), slide_canvas_(19,16),  
+  pattern_canvas_(19,16), quant_canvas_(19,16), mode_sel_canvas_(19,16), voct_canvas_(12,16), 
+  select_canvas_(w, 4), display_(w, h, &Wire, OLED_RESET), addr_(addr)
 {
   xoff_top_[0] = XOFF_BPM;
   xoff_top_[1] = XOFF_DUTY;
   xoff_top_[2] = XOFF_SLIDE;
   xoff_top_[3] = XOFF_PATTERN;
   xoff_top_[4] = XOFF_QUANT;
-  xoff_top_[5] = XOFF_VOCT;
-  xoff_top_[6] = w;
+  xoff_top_[5] = XOFF_MODE_SEL;
+  xoff_top_[6] = XOFF_VOCT;
+  xoff_top_[7] = w;
+
+  title_canvas_.setFont(&Org_01);
+  title_canvas_.setTextSize(2);
+  title_canvas_.setTextColor(SSD1306_WHITE);
 
   bpm_canvas_.setFont(&Org_01);
   bpm_canvas_.setTextSize(1);
@@ -62,6 +68,10 @@ SeqDisplay::SeqDisplay(int w /*=128*/, int h /*=64 */, int addr /*=0x3C*/)
   quant_canvas_.setTextSize(1);
   quant_canvas_.setTextColor(SSD1306_WHITE);
 
+  mode_sel_canvas_.setFont(&Org_01);
+  mode_sel_canvas_.setTextSize(1);
+  mode_sel_canvas_.setTextColor(SSD1306_WHITE);
+
   voct_canvas_.setFont(&Org_01);
   voct_canvas_.setTextSize(1);
   voct_canvas_.setTextColor(SSD1306_WHITE);
@@ -74,7 +84,24 @@ bool SeqDisplay::begin()
   if(!display_.begin(SSD1306_SWITCHCAPVCC, addr_)) {
     return false;
   }
+  clear_all();
+}
+
+void SeqDisplay::clear_all()
+{
   display_.clearDisplay(); 
+}
+
+void SeqDisplay::display_title(const char *t, int const y_off /*=12*/) 
+{
+  title_canvas_.fillScreen(SSD1306_BLACK);
+  title_canvas_.setCursor(3, y_off);
+  title_canvas_.println(t);
+  
+  clear_all();
+  display_.drawBitmap(0,0,title_canvas_.getBuffer(),title_canvas_.width(),title_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+  display_.display();
 }
 
 void SeqDisplay::set_bpm(int bpm)
@@ -170,10 +197,21 @@ void SeqDisplay::set_pattern(int const pat)
 void SeqDisplay::set_quant(const char* q) 
 {
   quant_canvas_.fillScreen(SSD1306_BLACK);
-  quant_canvas_.setCursor(2, 6);
-  quant_canvas_.print("QUANT:");
-  quant_canvas_.setCursor(2, 15);
+  quant_canvas_.setCursor(1, 5);
+  quant_canvas_.print("QNT");
+  quant_canvas_.drawFastHLine(1, 8, 17, SSD1306_WHITE);
+  quant_canvas_.setCursor(1, 15);
   quant_canvas_.println(q);
+}
+
+void SeqDisplay::set_mode_sel(const char* q) 
+{
+  mode_sel_canvas_.fillScreen(SSD1306_BLACK);
+  mode_sel_canvas_.setCursor(1, 5);
+  mode_sel_canvas_.print("MOD");
+  mode_sel_canvas_.drawFastHLine(1, 8, 17, SSD1306_WHITE);
+  mode_sel_canvas_.setCursor(1, 15);
+  mode_sel_canvas_.println(q);
 }
 
 void SeqDisplay::set_voct(int imin, int span)
@@ -183,18 +221,18 @@ void SeqDisplay::set_voct(int imin, int span)
   }
   voct_canvas_.fillScreen(SSD1306_BLACK);
   for (int i = 0; i < 5; ++i) {
-    voct_canvas_.drawFastHLine(1, 3*i + 1, 10, SSD1306_WHITE);
+    voct_canvas_.drawFastHLine(1, 3*i + 2, 11, SSD1306_WHITE);
   }
   for (int i = 0; i < span; ++i) {
-    int const y0 = 12 - 3*(i+imin);
-    voct_canvas_.drawRect(2, y0, 8, 3, SSD1306_WHITE);
+    int const y0 = 13 - 3*(i+imin);
+    voct_canvas_.drawRect(2, y0, 9, 3, SSD1306_WHITE);
   }
  
 }
 
 void SeqDisplay::select_top(int const index)
 {
-  if (index < -1 || index > 5) {
+  if (index < -1 || index > 6) {
     return;
   }
   select_canvas_.fillScreen(SSD1306_BLACK);
@@ -209,7 +247,7 @@ void SeqDisplay::select_top(int const index)
 
 void SeqDisplay::activate_top(int const index)
 {
-  if (index < -1 || index > 5) {
+  if (index < -1 || index > 6) {
     return;
   }
   select_canvas_.fillScreen(SSD1306_BLACK);
@@ -244,6 +282,8 @@ void SeqDisplay::display_status()
   display_.drawBitmap(XOFF_PATTERN,0,pattern_canvas_.getBuffer(),pattern_canvas_.width(),pattern_canvas_.height(),
     SSD1306_WHITE,SSD1306_BLACK);
   display_.drawBitmap(XOFF_QUANT,0,quant_canvas_.getBuffer(),quant_canvas_.width(),quant_canvas_.height(),
+    SSD1306_WHITE,SSD1306_BLACK);
+  display_.drawBitmap(XOFF_MODE_SEL,0,mode_sel_canvas_.getBuffer(),mode_sel_canvas_.width(),mode_sel_canvas_.height(),
     SSD1306_WHITE,SSD1306_BLACK);
   display_.drawBitmap(XOFF_VOCT,0,voct_canvas_.getBuffer(),voct_canvas_.width(),voct_canvas_.height(),
     SSD1306_WHITE,SSD1306_BLACK);

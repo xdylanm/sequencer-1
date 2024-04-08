@@ -51,6 +51,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# VScode
+.theia/
+
 # For PCBs designed using KiCad: https://www.kicad.org/
 # Format documentation: https://kicad.org/help/file-formats/
 
@@ -72,6 +75,8 @@ _autosave-*
 *-save.kicad_pcb
 fp-info-cache
 sym-lib-table
+fp-lib-table
+\#auto_saved_files\#
 
 # Autorouter files (exported from Pcbnew)
 *.dsn

@@ -148,12 +148,19 @@ void setup() {
   init_ADC(ADC_INPUTCTRL_MUXPOS_AIN, GCLK_CLKCTRL_GEN_GCLK5, adc_config.adc_prescaler, adc_config.adc_samplen, adc_config.adc_samplenum);
   
   analogWriteResolution(10);  // 10 bit DAC
+  
+  //Serial.println("Starting sequencer");
+  
+  if (!display.begin()) {
+    Serial.println("Display initialization failed");
+    error_blink(0);
+  }
+  for (int i = 0; i < 13; ++i) {
+    display.display_title("SEQUENCER-1", i);
+    delay(50);
+  }
 
   status_pixels.begin();
-  
-  delay(1000);
-  Serial.println("Starting sequencer");
-  
   for (int i = 0; i < 8; ++ i) {
     status_pixels.setPixelColor(i, status_pixels.Color(0, 96, 0));
     if (i > 0) {
@@ -165,19 +172,12 @@ void setup() {
   status_pixels.clear();
   status_pixels.show();
   
-  if (!display.begin()) {
-    Serial.println("Display initialization failed");
-    error_blink(0);
+  delay(1000);
+  for (int i = 13; i < 32; ++i) {
+    display.display_title("SEQUENCER-1", i);
+    delay(50);
   }
-  display.set_bpm(218);
-  display.set_duty(69);
-  display.set_slide(37);
-  display.set_pattern(0);
-  display.set_quant("LINEAR");
-  display.set_voct(1, 2);
-  display.select_top(2);
-  display.display_status();
-  delay(2000); // Pause for 2 seconds
+  display.clear_all();
 
   seq_state.set_rotary_position(rot_encoder.getPosition());
     // register interrupt routine for rotary encoder
@@ -217,23 +217,36 @@ void loop()
     display.set_duty(seq_state.duty_pct());
     display.set_slide(seq_state.slide_pct());
     
-    display.set_pattern((int)seq_state.pattern);
-    switch(seq_state.quant) {
+    display.set_pattern((int)seq_state.pattern());
+    
+    switch(seq_state.quant()) {
       case MachineState::Quantization::NONE:
-        display.set_quant("LINEAR");
+        display.set_quant("LIN");
         break;
       case MachineState::Quantization::CHROMATIC:
-        display.set_quant("CHROMA");
+        display.set_quant("CRO");
         break;
       case MachineState::Quantization::MAJOR:
-        display.set_quant("MAJOR");
+        display.set_quant("MAJ");
         break;
       case MachineState::Quantization::MINOR:
-        display.set_quant("MINOR");
+        display.set_quant("MIN");
         break;
     }
     
-    switch(seq_state.voct_range) {
+    switch(seq_state.step_button_mode()) {
+      case MachineState::StepButtonMode::STEP_ACTIVE:
+        display.set_mode_sel("ACT");
+        break;
+      case MachineState::StepButtonMode::STEP_ENABLE:
+        display.set_mode_sel("EN");
+        break;
+      default:
+        break;  
+
+    }
+
+    switch(seq_state.voct_range()) {
       case MachineState::OutputRange::VOCT_5:
         display.set_voct(0, 5);
         break;

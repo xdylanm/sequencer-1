@@ -25,17 +25,12 @@ public:
 
   MachineState();
 
-  Quantization quant;
-  OutputRange voct_range;
-  PatternMode pattern;
-  StepButtonMode step_button_mode;
-  
-  SoftButton step_button[MAX_NUM_STEPS];
-  SoftButton run_button;
-  SoftButton mode_button;
-  SoftButton rotary_button;
+  bool running() const { return running_; }
 
-  bool running;
+  Quantization quant() const { return quant_; }
+  OutputRange voct_range() const { return voct_range_; }
+  PatternMode pattern() const { return pattern_; }
+  StepButtonMode step_button_mode() const { return step_button_mode_; }
 
  // Duty Cycle
   int duty_pct() const { return duty_pct_; }
@@ -48,17 +43,19 @@ public:
   int  tick_freq() const { return tick_freq_; }
   int bpm() const { return bpm_; }
 
+  // Octave shift
+  int octave_shift() const { return octave_shift_; }
+
   void push(int ich, uint16_t pot_val, int step_val);
   uint8_t process_key_events(int run_val, int mode_val, int rot_sw_val, int rot_pos);        // process keys and update state
 
-  int current_step() const { return ki_; }
   int advance_step();            // advance to ki, compute next ki
   uint16_t quant_cv(bool at_next = false) const;   // report quantized CV
 
+  int current_step() const { return ki_; }
   bool current_step_active() const { return step_active_[ki_]; }
   bool current_step_enabled() const { return step_enable_[ki_]; }
 
-  int octave_shift() const { return octave_shift_; }
 
   uint32_t pixel_color(int i) const 
   {
@@ -68,16 +65,25 @@ public:
     return 0;
   }  
 
-  void set_rotary_position(int pos) 
-  {
-    rotary_pos_ = pos;
-  }
+  void set_rotary_position(int pos) { rotary_pos_ = pos; }
 
   TopMenuState const& menu_state() const { return menu_state_; }
 
 private:
 
   TopMenuState menu_state_;
+
+  Quantization quant_;
+  OutputRange voct_range_;
+  PatternMode pattern_;
+  StepButtonMode step_button_mode_;
+  
+  SoftButton step_button_[MAX_NUM_STEPS];
+  SoftButton run_button_;
+  SoftButton mode_button_;
+  SoftButton rotary_button_;
+
+  bool running_;
 
   int ki_;      // interval index (0-7)
   int ki_next_;
@@ -98,8 +104,8 @@ private:
   uint16_t cv_[MAX_NUM_STEPS];   
   uint32_t pixel_wrgb_[MAX_NUM_STEPS]; 
 
-  void process_mode_button();
   void process_run_button();
+  uint8_t process_mode_button();
   uint8_t process_step_buttons();
   uint8_t process_rotary(int new_pos);
 

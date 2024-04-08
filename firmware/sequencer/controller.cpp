@@ -10,7 +10,7 @@ Controller::Controller()
 bool Controller::tick(MachineState& state) 
 {
   bool new_interval = false;
-  if (state.running) {
+  if (state.running()) {
     ++mi_;
     if (mi_ >= tpi_) {
       state.advance_step();

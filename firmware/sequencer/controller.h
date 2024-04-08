@@ -13,7 +13,7 @@ public:
  
   int gate(MachineState const& state) const 
   {
-    if (state.running && state.current_step_active()) {
+    if (state.running() && state.current_step_active()) {
       return (mi_ < duty_tpi_);
     }
     return 0;
@@ -21,7 +21,7 @@ public:
 
   uint16_t cv(MachineState const& state) const
   {
-    if (state.running && state.current_step_active()) {
+    if (state.running() && state.current_step_active()) {
       if (mi_ < slide_tpi_) {   // slide_tpi_ <= tpi_
         return state.quant_cv();
       } else {
