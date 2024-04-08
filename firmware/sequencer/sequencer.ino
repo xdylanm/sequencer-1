@@ -3,6 +3,7 @@
 #include <Adafruit_NeoPixel_ZeroDMA.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h> 
+#include <RotaryEncoder.h>
 #include "seqdisplay.h"
 #include "controller.h"
 #include "port_util.h"
@@ -67,10 +68,12 @@ uint8_t const mux_addr_gray_table[] = {
 };
 int const addr_pins[] = {PAX_MUX_ADDR0, PAX_MUX_ADDR1, PAX_MUX_ADDR2};
 
+MachineState seq_state;
 Controller engine;
+RotaryEncoder rot_encoder(PIN_ROT_IN2, PIN_ROT_IN1, RotaryEncoder::LatchMode::FOUR3);
 
 volatile int ch_ndx, next_ch_ndx;
-volatile bool new_interval;
+volatile bool update_npxls, update_display;
 
 // main timing for the engine comes from the conversion interrupts
 void ADC_Handler() 
@@ -83,19 +86,34 @@ void ADC_Handler()
   iopin_digital_write(addr_pins[mux_addr_gray_table[2*next_ch_ndx]], mux_addr_gray_table[2*next_ch_ndx + 1]);
 
   // write the active CV & gate levels out
-  analogWrite(PIN_CV_DAC_OUT, engine.cv());
-  digitalWrite(PIN_GATE_OUT, engine.gate());
+  analogWrite(PIN_CV_DAC_OUT, engine.cv(seq_state));
+  digitalWrite(PIN_GATE_OUT, engine.gate(seq_state));
 
   int const run_stop_raw = digitalRead(PIN_RUN_STOP_BUTTON);
   int const mode_raw = digitalRead(PIN_MODE_BUTTON);
-  new_interval |= engine.tick(ch_ndx, pot_val_raw, step_key_raw, run_stop_raw, mode_raw);
-  engine.state().process_key_events();
+  int const rot_sw_raw = digitalRead(PIN_ROT_SW);
+  
+  update_npxls |= engine.tick(seq_state);
+
+  seq_state.push(ch_ndx, pot_val_raw, step_key_raw);
+  uint8_t const res = seq_state.process_key_events(run_stop_raw, mode_raw, rot_sw_raw, rot_encoder.getPosition());
+  update_npxls |= (bool)(res & INVALIDATE_NPXLS);
+  update_display |= (bool)(res & INVALIDATE_OLED);
+
+  engine.update_parameters(seq_state);
+
+
 
   ch_ndx = next_ch_ndx;
   next_ch_ndx = (next_ch_ndx + 1) % MAX_NUM_STEPS;
 
   ADC->INTFLAG.bit.RESRDY = 1;  // write a bit to clear interrupt
 
+}
+
+void check_position() 
+{
+  rot_encoder.tick();
 }
 
 void error_blink(int i) {
@@ -117,9 +135,8 @@ void setup() {
   pinMode(PIN_MODE_BUTTON, INPUT_PULLUP);
   pinMode(PIN_ROT_SW, INPUT_PULLUP);
   pinMode(PIN_GATE_OUT, OUTPUT);  
-  pinMode(PIN_ROT_IN1, INPUT);
-  pinMode(PIN_ROT_IN2, INPUT);
-
+  //pinMode(PIN_ROT_IN1, INPUT);   // handled by rotary encoder: input w/ pullup
+  //pinMode(PIN_ROT_IN2, INPUT);
   
   init_pin_for_D_out(PAX_MUX_ADDR0);
   init_pin_for_D_out(PAX_MUX_ADDR1);
@@ -154,21 +171,31 @@ void setup() {
   }
   display.set_bpm(218);
   display.set_duty(69);
+  display.set_slide(37);
+  display.set_pattern(0);
+  display.set_quant("LINEAR");
+  display.set_voct(1, 2);
+  display.select_top(2);
   display.display_status();
   delay(2000); // Pause for 2 seconds
-  
 
+  seq_state.set_rotary_position(rot_encoder.getPosition());
+    // register interrupt routine for rotary encoder
+  attachInterrupt(digitalPinToInterrupt(PIN_ROT_IN1), check_position, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIN_ROT_IN2), check_position, CHANGE);
+  
   ch_ndx = 0;
   next_ch_ndx = 1;
 
-  engine.tick_freq(2000);
-  engine.duty(50);
-  engine.slide(10);
-  engine.bpm(60);
+  seq_state.tick_freq(2000);
+  engine.update_parameters(seq_state);
     
   iopin_digital_write(PAX_MUX_ADDR0,0);
   iopin_digital_write(PAX_MUX_ADDR1,0);
   iopin_digital_write(PAX_MUX_ADDR2,0);
+
+  update_npxls = false;
+  update_display = true;  // one shot
 
   start_ADC();
 }
@@ -176,69 +203,58 @@ void setup() {
 void loop() 
 {
 
-  if (new_interval) {
-    new_interval = false;
+  if (update_npxls) {
+    update_npxls = false;
     for (int i = 0; i < MAX_NUM_STEPS; ++i) {
-      status_pixels.setPixelColor(i, engine.state().pixel_color(i));
+      status_pixels.setPixelColor(i, seq_state.pixel_color(i));
     }
     status_pixels.show();
   }
 
-/*
-  if (ch0_val > 0) {
-    //Serial.println(ch0_val);
-    uint16_t lvl = ((ch0_val >> 9) & 0x0007) + 1; // 12 bits >> 9 bits = 3 bits ==> 0-7
-    ch0_val = 0;
-
-    for (int i = 0; i < lvl; ++i) {
-      status_pixels.setPixelColor(i, status_pixels.Color(0, 96, 0));
+  if (update_display) {
+    
+    display.set_bpm(seq_state.bpm());
+    display.set_duty(seq_state.duty_pct());
+    display.set_slide(seq_state.slide_pct());
+    
+    display.set_pattern((int)seq_state.pattern);
+    switch(seq_state.quant) {
+      case MachineState::Quantization::NONE:
+        display.set_quant("LINEAR");
+        break;
+      case MachineState::Quantization::CHROMATIC:
+        display.set_quant("CHROMA");
+        break;
+      case MachineState::Quantization::MAJOR:
+        display.set_quant("MAJOR");
+        break;
+      case MachineState::Quantization::MINOR:
+        display.set_quant("MINOR");
+        break;
     }
-    for (int i = lvl; i < 8; ++i) {
-      status_pixels.setPixelColor(i, status_pixels.Color(0, 0, 0));
+    
+    switch(seq_state.voct_range) {
+      case MachineState::OutputRange::VOCT_5:
+        display.set_voct(0, 5);
+        break;
+      case MachineState::OutputRange::VOCT_2:
+        display.set_voct(2 + seq_state.octave_shift(), 2);
+        break;
+      case MachineState::OutputRange::VOCT_1:
+        display.set_voct(2 + seq_state.octave_shift(), 1);
+        break;
     }
-    status_pixels.show();
-  }
-*/
 
-  /*
-  int const step_key_raw = iopin_digital_read(PAX_MUXD_STEP_BUTTON);   // active low
-  buttons_tmp[ch_ndx] = step_key_raw == 0 ? 1 : 0;
+    if (seq_state.menu_state().editing) {
+      display.activate_top(seq_state.menu_state().active_menu_item);
+    } else {
+      display.select_top(seq_state.menu_state().active_menu_item);
+    }
 
-  // should be OK to switch the MUX in between: settle time << sample time
-  iopin_digital_write(addr_pins[mux_addr_gray_table[2*next_ch_ndx]], mux_addr_gray_table[2*next_ch_ndx + 1]);
+    update_display = false;
 
-  for (int i = 0; i < 8; ++i) {
-    status_pixels.setPixelColor(i, status_pixels.Color(0, 96*buttons_tmp[i], 0));
-  }
-  status_pixels.show();
+    display.display_status();
 
-  ch_ndx = next_ch_ndx;
-  next_ch_ndx = (next_ch_ndx + 1) % 8;
-  delay(5);
-*/
-
-
-
-
-  
-/*
-  // put your main code here, to run repeatedly:
-  int new_pos = encoder.getPosition();
-  if (pos != new_pos) {
-    pos = new_pos;
-    display.update_position(new_pos);
-    display.show();
-
-    pixels.setPixelColor(0, pixels.Color(0, 0, 32));
-    pixels.show();
-    delay(100);
-    pixels.clear();
-    pixels.show();
   }
 
-  apply_button.update();
-  if (apply_button.fell()) {
-    display.invert();
-  }
-  */
 }

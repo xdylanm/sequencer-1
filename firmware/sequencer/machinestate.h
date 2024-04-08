@@ -5,6 +5,8 @@
 #include "softbutton.h"
 
 #define MAX_NUM_STEPS 8
+#define INVALIDATE_NPXLS 0x01
+#define INVALIDATE_OLED  0x02
 
 class MachineState
 {
@@ -14,6 +16,12 @@ public:
   enum PatternMode {LOOP, BOUNCE, RANDOM, NUM_PATTERNS};
   enum OutputRange {VOCT_1=1, VOCT_2=2, VOCT_5=5};
   enum StepButtonMode {STEP_ACTIVE, STEP_ENABLE, NUM_STEP_BUTTON_MODES}; // STEP_SLIDE
+  struct TopMenuState
+  {
+    TopMenuState() : active_menu_item(-1), editing(false) {}
+    int active_menu_item;
+    bool editing;
+  };
 
   MachineState();
 
@@ -25,40 +33,77 @@ public:
   SoftButton step_button[MAX_NUM_STEPS];
   SoftButton run_button;
   SoftButton mode_button;
+  SoftButton rotary_button;
 
   bool running;
 
-  uint8_t step_active[MAX_NUM_STEPS];
-  uint8_t step_enable[MAX_NUM_STEPS];
+ // Duty Cycle
+  int duty_pct() const { return duty_pct_; }
 
-  int tick_freq;   // frequency of event loop (1/T_conv)
-  int bpm;         // 24-240
-  int duty_pct;    // 0-100
-  int slide_pct;   // 0-100
+  // Slide Range
+  int slide_pct() const { return slide_pct_; }
 
-  void push(int ich, uint16_t pot_val, int step_val, int run_val, int mode_val);
+  // Speed/BPM
+  void tick_freq(int f)  { tick_freq_ = f; }
+  int  tick_freq() const { return tick_freq_; }
+  int bpm() const { return bpm_; }
 
-  int next_step(int ki);            // advance to ki, compute next ki
-  uint16_t quant_cv(int i) const;   // report quantized CV
+  void push(int ich, uint16_t pot_val, int step_val);
+  uint8_t process_key_events(int run_val, int mode_val, int rot_sw_val, int rot_pos);        // process keys and update state
 
-  void process_key_events();        // process keys and update state
+  int current_step() const { return ki_; }
+  int advance_step();            // advance to ki, compute next ki
+  uint16_t quant_cv(bool at_next = false) const;   // report quantized CV
 
-  uint32_t pixel_color(int i) const {
+  bool current_step_active() const { return step_active_[ki_]; }
+  bool current_step_enabled() const { return step_enable_[ki_]; }
+
+  int octave_shift() const { return octave_shift_; }
+
+  uint32_t pixel_color(int i) const 
+  {
     if (i >= 0 && i < MAX_NUM_STEPS) {
       return pixel_wrgb_[i];
     }
     return 0;
   }  
 
+  void set_rotary_position(int pos) 
+  {
+    rotary_pos_ = pos;
+  }
+
+  TopMenuState const& menu_state() const { return menu_state_; }
 
 private:
+
+  TopMenuState menu_state_;
+
+  int ki_;      // interval index (0-7)
+  int ki_next_;
+
+  uint8_t step_active_[MAX_NUM_STEPS];
+  uint8_t step_enable_[MAX_NUM_STEPS];
+
+  int tick_freq_;  // frequency of event loop (1/T_conv)
+  int bpm_;        // 24-240
+  int duty_pct_;   // 0-100
+  int slide_pct_;  // 0-100
 
   int bounce_dir_;    // bounce direction for bounce pattern
   uint32_t r_state_;  // state for random interval counter
   int octave_shift_;  // transpose by octave
+  int rotary_pos_;    // current position of the rotary
   
   uint16_t cv_[MAX_NUM_STEPS];   
   uint32_t pixel_wrgb_[MAX_NUM_STEPS]; 
+
+  void process_mode_button();
+  void process_run_button();
+  uint8_t process_step_buttons();
+  uint8_t process_rotary(int new_pos);
+
+  void update_npxls();
 
 };
 

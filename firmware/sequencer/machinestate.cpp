@@ -18,63 +18,69 @@ namespace {
 MachineState::MachineState()
 : quant(Quantization::NONE), voct_range(OutputRange::VOCT_1), pattern(PatternMode::LOOP),
   step_button_mode(StepButtonMode::STEP_ACTIVE), run_button(32, SoftButton::ACTIVE_LOW), 
-  mode_button(32, SoftButton::ACTIVE_LOW), running(false), tick_freq(2000), bpm(60), 
-  duty_pct(50), slide_pct(0), bounce_dir_(1), r_state_(2), octave_shift_(0)
+  mode_button(32, SoftButton::ACTIVE_LOW), rotary_button(32, SoftButton::ACTIVE_LOW), 
+  running(false), tick_freq_(2000), bpm_(100), duty_pct_(50), slide_pct_(10), bounce_dir_(1),
+  r_state_(2), octave_shift_(0)
 {
 
   for (int i = 0; i < MAX_NUM_STEPS; ++i) {
     step_button[i].set_ticks(4);    // time = MAX_NUM_STEPS/tick_freq
     step_button[i].set_active_level(SoftButton::ACTIVE_LOW);
-    step_active[i] = 1;
-    step_enable[i] = 1;
+    step_active_[i] = 1;
+    step_enable_[i] = 1;
     cv_[i] = 0;    
     pixel_wrgb_[i] = 0ul;
   }
 }
 
-void MachineState::push(int ich, uint16_t pot_val, int step_val, int run_val, int mode_val)
+void MachineState::push(int ich, uint16_t pot_val, int step_val)
 {
-  run_button.update(run_val);
-  mode_button.update(mode_val);
   step_button[ich].update(step_val);
   cv_[ich] = pot_val;
 }
 
-int MachineState::next_step(int ki) 
+
+int MachineState::advance_step() 
 {
+  ki_ = ki_next_;
+
   for (int i = 0; i < MAX_NUM_STEPS; ++i) {
     pixel_wrgb_[i] &= 0x00FFFFFF;   // mask off white
   }
-  pixel_wrgb_[ki] |= (0x08 << WHITE_BYTE_POS);
+  pixel_wrgb_[ki_] |= (0x08 << WHITE_BYTE_POS);
 
+  int safety_counter = 0;
   switch (pattern) {
   case LOOP:
     do {
-      ki = (ki + 1) % MAX_NUM_STEPS;
-    } while(!step_enable[ki]);
+      ki_next_ = (ki_next_ + 1) % MAX_NUM_STEPS;
+      safety_counter++;
+    } while(!step_enable_[ki_next_] && (safety_counter < MAX_NUM_STEPS));
     break;
   case BOUNCE:
     do {
-      ki += bounce_dir_;
-      if (ki == (MAX_NUM_STEPS - 1)) {
+      ki_next_ += bounce_dir_;
+      if (ki_next_ == (MAX_NUM_STEPS - 1)) {
         bounce_dir_ = -1;
-      } else if (ki == 0) {
+      } else if (ki_next_ == 0) {
         bounce_dir_ = 1;
       }
-    } while(!step_enable[ki]);
+      safety_counter++;
+    } while(!step_enable_[ki_next_] && (safety_counter < MAX_NUM_STEPS));
     break;
   case RANDOM:
     do { 
       xorshift32(r_state_);
-      ki = 0x00000007 & r_state_;
-    } while(!step_enable[ki]);
+      ki_next_ = 0x00000007 & r_state_;
+      safety_counter++;
+    } while(!step_enable_[ki_next_] && (safety_counter < MAX_NUM_STEPS));
     break;
   }
   
-  return ki;
+  return ki_next_;
 }
 
-uint16_t MachineState::quant_cv(int i) const 
+uint16_t MachineState::quant_cv(bool const at_next /*=false*/) const 
 {
   // range compression -- divide the range into 5 blocks, scale & shift
   // Voct1: block 2
@@ -83,7 +89,7 @@ uint16_t MachineState::quant_cv(int i) const
   int32_t const block_size = 204;   // 1024/5, 4 bits remain (2 top & bottom) == 17*12 (!!)
   int32_t const semitone_width = 17;
 
-  int32_t const v = cv_[i];  // 12 bit ADC, 10 bit DAC
+  int32_t const v = cv_[at_next ? ki_next_ : ki_];  // 12 bit ADC, 10 bit DAC
   int32_t vo = (v * block_size * (uint32_t)voct_range + 2048) / 4096;  // integer rounding
 
   // quantization
@@ -109,6 +115,19 @@ uint16_t MachineState::quant_cv(int i) const
   return (uint16_t)vo;  
 }
 
+void MachineState::update_npxls()
+{
+  for (int i = 0; i < MAX_NUM_STEPS; ++i) {
+    if (running && step_enable_[i]) {
+      uint8_t const val = step_active_[i] ? 0x08 : 0x03;
+      pixel_wrgb_[i] = (val << RED_BYTE_POS) | (val << BLUE_BYTE_POS);
+    } else {
+      pixel_wrgb_[i] = 0;
+    }
+  }
+}
+
+//TODO
 struct key_states_def
 {
   enum ActiveModifier {NONE, RUNSTOP, MODE};
@@ -117,7 +136,25 @@ struct key_states_def
   bool applied_mode_modifier;
 } key_states;
 
-void MachineState::process_key_events()
+
+uint8_t MachineState::process_key_events(int run_val, int mode_val, int rot_sw_val, int rot_pos)
+{
+  run_button.update(run_val);
+  mode_button.update(mode_val);
+  rotary_button.update(rot_sw_val);
+  
+  uint8_t invalidate = 0;
+  
+  process_run_button();
+  process_mode_button();
+  invalidate |= process_step_buttons();
+  invalidate |= process_rotary(rot_pos);
+
+  return invalidate;
+
+}
+
+void MachineState::process_run_button() 
 {
   SoftButton::ButtonEvent const run_event = run_button.event();
   if (run_event == SoftButton::EVENT_KEY_DOWN) {
@@ -125,28 +162,23 @@ void MachineState::process_key_events()
   } else if (run_event == SoftButton::EVENT_KEY_UP) {
     if (!key_states.applied_runstop_modifier) { // tap
       running = !running; // toggle run/pause if tap
+      update_npxls();
       if (running) {
-        for (int i = 0; i < MAX_NUM_STEPS; ++i) {
-          if (step_enable[i]) {
-            uint8_t const val = step_active[i] ? 0x08 : 0x03;
-            pixel_wrgb_[i] = (val << RED_BYTE_POS) | (val << BLUE_BYTE_POS);
-          } else {
-            pixel_wrgb_[i] = 0;
-          }
-        }
-      } else {
-        for (int i = 0; i < MAX_NUM_STEPS; ++i) {
-          pixel_wrgb_[i] = 0;
+        r_state_ = micros(); 
+        if (r_state_ == 0) { 
+          r_state_ = 2;
         }
       }
-      // TODO reset random seed
     }
     if (key_states.modifier == key_states_def::RUNSTOP) { // remove modifier
       key_states.modifier = key_states_def::NONE;
       key_states.applied_runstop_modifier = false;
     }
   }
-  
+}
+
+void MachineState::process_mode_button() 
+{
   SoftButton::ButtonEvent const mode_event = mode_button.event();
   if (mode_event == SoftButton::EVENT_KEY_DOWN) {
     key_states.modifier = key_states_def::MODE;
@@ -164,24 +196,34 @@ void MachineState::process_key_events()
     }
   }
 
+}
+
+uint8_t MachineState::process_step_buttons() 
+{
+  uint8_t invalidate = 0;
+
   for (int i = 0; i < MAX_NUM_STEPS; ++i) {
     SoftButton::ButtonEvent e = step_button[i].event();  // consume
     if (e == SoftButton::EVENT_KEY_DOWN) {
       switch (key_states.modifier) {
         case key_states_def::RUNSTOP:
-          // TODO re-start sequence here if this step is enabled/active
+          if (step_active_[i] && step_enable_[i]) {
+            ki_next_ = i;
+            advance_step();
+            invalidate |= INVALIDATE_NPXLS;
+          }
           key_states.applied_runstop_modifier = true;   // avoid tap events on modifiers
           break;
         case key_states_def::MODE:
           switch (i) {
-            case 0: // octave +
-              if (octave_shift_ < 2) {
-                ++octave_shift_;
-              }
-              break;
-            case 1: // octave -
+            case 0: // octave -
               if (octave_shift_ > -2) {
                 --octave_shift_;
+              }
+              break;
+            case 1: // octave +
+              if (octave_shift_ < 2) {
+                ++octave_shift_;
               }
               break;
             case 2: // linear
@@ -210,24 +252,120 @@ void MachineState::process_key_events()
               break;
           } 
           key_states.applied_mode_modifier = true;   // avoid tap events on modifiers
+          invalidate |= INVALIDATE_OLED;
           break;
         case key_states_def::NONE:
         default:
           switch (step_button_mode) {
             case STEP_ACTIVE:
-              step_active[i] = step_active[i] == 0 ? 1 : 0;
+              step_active_[i] = step_active_[i] == 0 ? 1 : 0;
               break;
             case STEP_ENABLE:
-              step_enable[i] = step_enable[i] == 0 ? 1 : 0;
+              step_enable_[i] = step_enable_[i] == 0 ? 1 : 0;
               break;
           }
+          update_npxls();
+          invalidate |= INVALIDATE_NPXLS;
           break;
           
       }
     }
   }
+  return invalidate;
+}
 
+namespace 
+{
+void adjust_setting(int& setting, int const delta, int const setting_min, int const setting_max)
+{
+  setting += delta;
+  if (setting < setting_min) {
+    setting = setting_min;
+  } else if (setting > setting_max) {
+    setting = setting_max;
+  }
+}
+
+void adjust_setting_loop(int& setting, int const delta, int const setting_min, int const setting_max)
+{
+  int const setting_range = setting_max - setting_min + 1;
+  setting += delta;
+  while (setting > setting_max) {
+    setting -= setting_range;
+  }
+  while (setting < setting_min) {
+    setting += setting_range;
+  }
+}
 
 }
+
+uint8_t MachineState::process_rotary(int const new_pos)
+{
+  uint8_t invalidate = 0;
+
+  SoftButton::ButtonEvent const rot_btn_event = rotary_button.event();
+  if ((menu_state_.active_menu_item >= 0) && (rot_btn_event == SoftButton::EVENT_KEY_DOWN)) {
+    menu_state_.editing = !menu_state_.editing;
+    invalidate |= INVALIDATE_OLED;
+  }
+
+  int const rot_change = new_pos - rotary_pos_;
+  if (new_pos != rotary_pos_) {
+    
+    if (!menu_state_.editing) {
+      adjust_setting_loop(menu_state_.active_menu_item, rot_change, -1, 5);
+    } else {
+      int current_voct = 0;
+      if (voct_range == OutputRange::VOCT_2) {
+        current_voct = 1;
+      } else if (voct_range == OutputRange::VOCT_5) {
+        current_voct = 2;
+      } else {
+        current_voct = 0;
+      }
+      int current_pattern = (int)pattern;
+      int current_quant = (int)quant;
+      switch (menu_state_.active_menu_item) 
+      {
+        case 0: // BPM
+          adjust_setting(bpm_, rot_change, 24, 240);
+          break;
+        case 1: // Duty
+          adjust_setting(duty_pct_, rot_change, 0, 100);
+          break;
+        case 2: // Slide
+          adjust_setting(slide_pct_, rot_change, 0, 100);
+          break;
+        case 3: // Pattern -- don't update controller settings
+          adjust_setting_loop(current_pattern, rot_change, 0, NUM_PATTERNS-1);
+          pattern = (PatternMode)(current_pattern);
+          break;
+        case 4: // Quantization -- don't update controller settings
+          adjust_setting_loop(current_quant, rot_change, 0, NUM_QUANTIZATION-1);
+          quant = (Quantization)(current_quant);
+          break;
+        case 5: // V/Oct range (1, 2, 5)
+          adjust_setting_loop(current_voct, rot_change, 0, 2);
+          if (current_voct == 0) {
+            voct_range = OutputRange::VOCT_1;
+          } else if (current_voct == 1) {
+            voct_range = OutputRange::VOCT_2;
+          } else if (current_voct == 2) {
+            voct_range = OutputRange::VOCT_5;
+          }  
+          break;
+        default: 
+          break;
+      }
+    }
+    rotary_pos_ = new_pos;
+    invalidate |= INVALIDATE_OLED;
+  }  
+
+  return invalidate;
+
+}
+
 
 
