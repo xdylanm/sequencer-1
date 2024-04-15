@@ -1022,6 +1022,10 @@
 		(color 0 0 0 0)
 		(uuid "f6aff00d-a39c-4876-bf84-1b5a4be9fcb1")
 	)
+	(no_connect
+		(at 224.79 111.76)
+		(uuid "ec7d4e12-d84e-4fae-a278-e82bb349988a")
+	)
 	(wire
 		(pts
 			(xy 128.27 119.38) (xy 128.27 121.92)
@@ -1612,16 +1616,27 @@
 		)
 		(uuid "fbbf0489-b226-401b-91d2-612a9e529025")
 	)
-	(label "NPXL_D5V"
-		(at 58.42 111.76 0)
+	(global_label "NPXL_D5V"
+		(shape input)
+		(at 58.42 111.76 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right)
 		)
-		(uuid "634b7647-22ea-4d78-bf0a-598f0b533bb7")
+		(uuid "9ab015ff-ad0f-46e9-924f-c5fa60384040")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 46.061 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
 	)
 	(symbol
 		(lib_id "LED:WS2812B")

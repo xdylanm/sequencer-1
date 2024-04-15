@@ -2587,6 +2587,182 @@
 		)
 		(uuid "d0a381d3-d0e5-4fdc-b1f5-e0080b7deb53")
 	)
+	(global_label "MUX_ADDR1"
+		(shape input)
+		(at 36.83 95.25 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1ecc052d-ebde-439e-a758-a67bd195879c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 22.7777 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "MUX_ADDR2"
+		(shape input)
+		(at 36.83 97.79 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "39588a9a-754c-4f1c-a92e-690ca7c8e183")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 22.7777 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "MUX_ADDR2"
+		(shape input)
+		(at 114.3 97.79 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6e8b429d-eca7-40cc-9672-bece8f0f9bff")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 100.2477 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "POT_MUX"
+		(shape input)
+		(at 114.3 87.63 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7223d265-f5fc-46b9-8c11-ae1afc48215b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 102.7877 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "MUX_ADDR1"
+		(shape input)
+		(at 114.3 95.25 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "74b70148-718b-4e21-a55c-5bd21ba29985")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 100.2477 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SW_MUX"
+		(shape input)
+		(at 36.83 87.63 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8ca47b19-08bc-46fd-ab60-f20e687ccb31")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 26.2249 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "MUX_ADDR0"
+		(shape input)
+		(at 36.83 92.71 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e7c8728f-7a3c-4866-8094-47cd19527dae")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 22.7777 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "MUX_ADDR0"
+		(shape input)
+		(at 114.3 92.71 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f786d5c3-7a97-4f71-ac47-147c19438d00")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 100.2477 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(symbol
 		(lib_id "Switch:SW_Push")
 		(at 80.01 105.41 0)

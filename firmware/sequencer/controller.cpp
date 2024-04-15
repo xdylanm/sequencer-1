@@ -26,11 +26,11 @@ bool Controller::tick(MachineState& state)
       slide_.reset(y0, y1, tpi_ - slide_tpi_);
     } else if (mi_ > slide_tpi_) {
       if (slide_.dy > slide_.dx) {
-        while (slide_.D <= 0) {
+        while (slide_.D < 0) {
           slide_.D += 2*slide_.dx;
           slide_.y += slide_.dir;
         }
-        slide_.D += 2*(slide_.dx - slide_.dy);
+        slide_.D += 2*slide_.dx;
       } else {
         if (slide_.D > 0) {
           slide_.y += slide_.dir;

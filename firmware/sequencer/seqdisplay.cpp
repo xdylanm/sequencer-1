@@ -325,7 +325,7 @@ void SeqDisplay::set_main_level_chart(int N, uint16_t const* cv, uint8_t const* 
   for (int i = 0; i < N; ++i) {
     if (enabled[i]) {
       main_canvas_.drawRect(2 + i*16, y_off + 2, 12, hy_max-1, SSD1306_WHITE);
-      uint32_t const hy = ((uint32_t)cv[i] * hy_max + 1024)/2048;
+      uint32_t const hy = ((uint32_t)cv[i] * hy_max + 2048)/4096;   // 12-bit ADC
       int const y0 = y_bottom - hy + 2;
       if (active[i]) {
         main_canvas_.fillRect(2 + i*16, y0, 12, hy-1, SSD1306_WHITE);
