@@ -2936,7 +2936,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 229.87 118.11 0)
 			(effects
 				(font
@@ -2945,7 +2945,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 229.87 118.11 0)
 			(effects
 				(font
@@ -3663,7 +3663,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 166.37 118.11 0)
 			(effects
 				(font
@@ -3672,7 +3672,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 166.37 118.11 0)
 			(effects
 				(font
@@ -3915,7 +3915,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 153.67 118.11 0)
 			(effects
 				(font
@@ -3924,7 +3924,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 153.67 118.11 0)
 			(effects
 				(font
@@ -3988,7 +3988,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 217.17 118.11 0)
 			(effects
 				(font
@@ -3997,7 +3997,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 217.17 118.11 0)
 			(effects
 				(font
@@ -4061,7 +4061,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 204.47 118.11 0)
 			(effects
 				(font
@@ -4070,7 +4070,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 204.47 118.11 0)
 			(effects
 				(font
@@ -4134,7 +4134,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 191.77 118.11 0)
 			(effects
 				(font
@@ -4143,7 +4143,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 191.77 118.11 0)
 			(effects
 				(font
@@ -4207,7 +4207,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 242.57 118.11 0)
 			(effects
 				(font
@@ -4216,7 +4216,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 242.57 118.11 0)
 			(effects
 				(font
@@ -4678,7 +4678,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.bourns.com/docs/Product-Datasheets/PTV09.pdf"
 			(at 179.07 118.11 0)
 			(effects
 				(font
@@ -4687,7 +4687,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Potentiometer, US symbol"
+		(property "Description" "PVT09A-4020U-B104"
 			(at 179.07 118.11 0)
 			(effects
 				(font
