@@ -46,7 +46,7 @@ private:
     {
       dx = deltax;  // always +ve
       if (y0 > y1) {
-        dir = -1;
+        dir = -1;   // yi
         dy = y0 - y1;
       } else {
         dir = 1;

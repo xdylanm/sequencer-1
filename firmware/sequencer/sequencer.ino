@@ -31,7 +31,7 @@ SeqDisplay display(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_ADDRESS);
 Adafruit_NeoPixel_ZeroDMA status_pixels(8, PIN_STATUS_NEOPIXELS, NEO_GRBW + NEO_KHZ800);
 
 // The controller for the roatary encoder
-RotaryEncoder rot_encoder(PIN_ROT_IN2, PIN_ROT_IN1, RotaryEncoder::LatchMode::FOUR3);
+RotaryEncoder rot_encoder(PIN_ROT_IN1, PIN_ROT_IN2, RotaryEncoder::LatchMode::FOUR3);
 
 // Settings for the ADC to define the base clock rate
 adc_config_def adc_config;
@@ -66,8 +66,6 @@ Controller engine;        // Engine to control the timing for the sequencer
 
 volatile int ch_ndx, next_ch_ndx;
 volatile bool update_npxls, update_display;
-volatile bool led_toggle;
-volatile int led_counter;
 
 // main timing for the engine comes from the conversion interrupts
 #if defined(__SAMD21__) 
@@ -141,8 +139,6 @@ void ADC0_1_Handler()
   ch_ndx = next_ch_ndx;
   next_ch_ndx = (next_ch_ndx + 1) % MAX_NUM_STEPS;
 
-  digitalWrite(LED_BUILTIN, 1);
-
   ADC0->INTFLAG.bit.RESRDY = 1;
 }
 #endif
@@ -166,8 +162,6 @@ void setup() {
   
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
-  led_toggle = false;
-  led_counter = 0;
 
   Serial.begin(115200);
 
@@ -220,7 +214,7 @@ void setup() {
 
   status_pixels.begin();
   for (int i = 0; i < 8; ++ i) {
-    status_pixels.setPixelColor(i, status_pixels.Color(0, 96, 0));
+    status_pixels.setPixelColor(i, status_pixels.Color(0, 48, 0));
     if (i > 0) {
       status_pixels.setPixelColor(i-1, status_pixels.Color(0, 0, 0));
     }
@@ -260,8 +254,6 @@ void setup() {
 
 void loop() 
 {
-  digitalWrite(LED_BUILTIN, LOW);
-
   if (update_npxls) {
     update_npxls = false;
     invalidate_npxls();
@@ -271,7 +263,6 @@ void loop()
     update_display = false;
     invalidate_display();
   }
-
 }
 
 

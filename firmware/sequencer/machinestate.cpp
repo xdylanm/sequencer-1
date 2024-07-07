@@ -1,4 +1,5 @@
 #include "machinestate.h"
+#include "board_target.h"
 
 #define WHITE_BYTE_POS 24
 #define RED_BYTE_POS 16
@@ -19,7 +20,7 @@ MachineState::MachineState()
 : quant_(Quantization::NONE), voct_range_(OutputRange::VOCT_1), pattern_(PatternMode::LOOP),
   step_button_mode_(StepButtonMode::STEP_ACTIVE), run_button_(32, SoftButton::ACTIVE_LOW), 
   mode_button_(32, SoftButton::ACTIVE_LOW), rotary_button_(32, SoftButton::ACTIVE_LOW), 
-  running_(false), tick_freq_(2000), bpm_(100), duty_pct_(50), slide_pct_(10), bounce_dir_(1),
+  running_(false), tick_freq_(2000), bpm_(200), duty_pct_(50), slide_pct_(80), bounce_dir_(1),
   r_state_(2), octave_shift_(0)
 {
 
@@ -86,11 +87,17 @@ uint16_t MachineState::quant_cv(bool const at_next /*=false*/) const
   // Voct1: block 2
   // Voct2: block 2, 3
   // Voct5: block 0-4
-  int32_t const block_size = 204;   // 1024/5, 4 bits remain (2 top & bottom) == 17*12 (!!)
-  int32_t const semitone_width = 17;
 
-  int32_t const v = cv_[at_next ? ki_next_ : ki_];  // 12 bit ADC, 10 bit DAC
-  int32_t vo = (v * block_size * (uint32_t)voct_range_ + 2048) / 4096;  // integer rounding
+  // scale block ranges for the number of bits of resolution in the DAC
+  // baseline is a 10-bit DAC (1024 values)
+  // 1024/5, 4 bits remain (2 top & bottom) == 17*12 (!!)
+  int const dac_bit_scale = DAC_NUM_BITS - 10;
+  int32_t const block_size = 204 << dac_bit_scale;   
+  int32_t const base_offset = 2 << dac_bit_scale;
+  int32_t const semitone_width = 17 << dac_bit_scale;
+
+  int32_t const v = cv_[at_next ? ki_next_ : ki_];  // 12 bit ADC
+  int32_t vo = (v * block_size * (uint32_t)voct_range_ + 2048) / 4096;  // scale to DAC block size (V/OCT), integer rounding
 
   // quantization
   if (quant_ != Quantization::NONE) {
@@ -103,12 +110,12 @@ uint16_t MachineState::quant_cv(bool const at_next /*=false*/) const
     }
     vo = semitone * semitone_width;
   }
-
-  int32_t block_offset = (voct_range_ == VOCT_5 ? 2 : 410);
+  
+  int32_t block_offset = base_offset + (voct_range_ == VOCT_5 ? 0 : 2*block_size);
   block_offset += octave_shift_ * block_size;   // +/- 2
   vo += block_offset;
-  if (vo > 4095) { 
-    return 4095;
+  if (vo >= (1 << DAC_NUM_BITS)) { 
+    return (1 << DAC_NUM_BITS) - 1;
   } else if (vo < 0) {
     return 0;
   }

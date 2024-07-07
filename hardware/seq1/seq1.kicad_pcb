@@ -183,7 +183,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 2.5 2.5 270)
+			(at 2.5 2.5 -90)
 			(layer "F.Fab")
 			(uuid "5e66d56b-c03a-4878-8d8c-ebe9a62d54e2")
 			(effects
@@ -375,7 +375,7 @@
 			(uuid "cf83b8e0-b5fe-4fa0-8616-da301a3295b1")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 270)
+			(at 2.5 0 -90)
 			(layer "F.Fab")
 			(uuid "a1fa95b9-09e9-4294-929c-10cb37b3f10c")
 			(effects
@@ -424,9 +424,9 @@
 		(descr "Diode, DO-41_SOD81 series, Axial, Vertical, pin pitch=2.54mm, , length*diameter=5.2*2.7mm^2, , http://www.diodes.com/_files/packages/DO-41%20(Plastic).pdf")
 		(tags "Diode DO-41_SOD81 series Axial Vertical pin pitch 2.54mm  length 5.2mm diameter 2.7mm")
 		(property "Reference" "D9"
-			(at 5.08 0 180)
+			(at 1.27 -2.750635 180)
 			(layer "F.SilkS")
-			(uuid "b138804c-d362-4438-a1cd-6a8cdb1a9bd6")
+			(uuid "a3b7343f-725e-4686-8570-df078df6218b")
 			(effects
 				(font
 					(size 1 1)
@@ -437,7 +437,7 @@
 		(property "Value" "SB160"
 			(at 1.27 3.639635 180)
 			(layer "F.Fab")
-			(uuid "e63c2e34-ad62-4c0f-b96c-ecc846425508")
+			(uuid "e2d26de6-4b4b-4eb3-b1c7-23a0ba3433dd")
 			(effects
 				(font
 					(size 1 1)
@@ -450,7 +450,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "092465a2-26ea-4418-91ee-50d7d9c9f806")
+			(uuid "a4fb3c33-9545-4419-9e42-a00e241df960")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -462,7 +462,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "1d81c5d4-ea00-4cf6-9ceb-e5df7633591f")
+			(uuid "1f31cc2d-0d25-48f4-a138-6da18093f5bd")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -474,7 +474,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "c902da2e-b876-4efa-a880-424ede6bc0d8")
+			(uuid "f373901c-b026-4bfa-bf1e-8b4a4be1b2a7")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -495,7 +495,7 @@
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "0bad0b12-59c9-46f0-8729-74ab8c1faab3")
+			(uuid "da36461b-e20c-4060-af5c-0f4a95197e2d")
 		)
 		(fp_line
 			(start 3.89 1.6)
@@ -505,7 +505,7 @@
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "d45e7ede-b5e6-46c3-9212-82d4160ba6ea")
+			(uuid "291c493e-eb47-475a-be12-9b82617d105e")
 		)
 		(fp_line
 			(start 3.89 -1.6)
@@ -515,7 +515,7 @@
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "0fcb6437-a30c-4ca4-bf02-ad20ac5c062b")
+			(uuid "dcd2b076-7f50-4fff-93d5-f2838907cd72")
 		)
 		(fp_line
 			(start -1.6 1.6)
@@ -525,7 +525,7 @@
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "78532d0b-0d0f-4653-abf5-a7f26efd4d24")
+			(uuid "9701c970-3447-4a02-a8ff-91bf6f12dbb7")
 		)
 		(fp_line
 			(start -1.6 -1.6)
@@ -535,7 +535,7 @@
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "05d51bb9-c805-4c70-853d-9472e9ab85ff")
+			(uuid "4fd3d9e6-42f4-4c58-9272-8e13cfcd8871")
 		)
 		(fp_line
 			(start 0 0)
@@ -545,7 +545,7 @@
 				(type solid)
 			)
 			(layer "F.Fab")
-			(uuid "dcd46d42-c99c-4249-9046-4893186b0ec9")
+			(uuid "a650d371-0157-4582-9476-332afcda42c1")
 		)
 		(fp_circle
 			(center 0 0)
@@ -556,12 +556,12 @@
 			)
 			(fill none)
 			(layer "F.Fab")
-			(uuid "74487851-1dee-4703-a408-275779d52f6e")
+			(uuid "4d3551b7-e058-48c3-b27c-18e6c00a95d3")
 		)
 		(fp_text user "A"
-			(at -1.778 -1.27 0)
+			(at 4.64 0 180)
 			(layer "F.SilkS")
-			(uuid "2aef1ff9-7d29-48fa-bda0-91b0f9d10d33")
+			(uuid "c14ec8be-5a80-4a8a-8050-b5524ab065e3")
 			(effects
 				(font
 					(size 1 1)
@@ -572,7 +572,7 @@
 		(fp_text user "A"
 			(at 4.64 0 180)
 			(layer "F.Fab")
-			(uuid "73876567-ed33-40cf-a298-af7ec10d9976")
+			(uuid "41ba3e95-a66b-4cca-ba37-ea583a2cdfad")
 			(effects
 				(font
 					(size 1 1)
@@ -583,7 +583,7 @@
 		(fp_text user "${REFERENCE}"
 			(at 1.27 -2.750635 180)
 			(layer "F.Fab")
-			(uuid "e4b9619f-cece-4c13-aec3-9e5dabd90043")
+			(uuid "84e644b4-96ef-4d37-a42f-c1799e895015")
 			(effects
 				(font
 					(size 1 1)
@@ -600,7 +600,7 @@
 			(net 51 "Net-(D9-K)")
 			(pinfunction "K")
 			(pintype "passive")
-			(uuid "e21f60f2-6626-41f4-9773-e6f469ca33d5")
+			(uuid "97f4350e-269b-4164-8266-9c613efa039b")
 		)
 		(pad "2" thru_hole oval
 			(at 2.54 0 180)
@@ -611,7 +611,7 @@
 			(net 12 "-12V")
 			(pinfunction "A")
 			(pintype "passive")
-			(uuid "dd4a0a26-0945-45ed-854d-69d335009137")
+			(uuid "b794a448-7da7-4496-a02a-e00abd951cac")
 		)
 		(model "${KICAD8_3DMODEL_DIR}/Diode_THT.3dshapes/D_DO-41_SOD81_P2.54mm_Vertical_AnodeUp.wrl"
 			(offset
@@ -1283,7 +1283,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 270)
+			(at 1.27 2.37 -90)
 			(layer "F.Fab")
 			(uuid "1ac4e8a6-b567-41d5-a824-ae56a68fc0c2")
 			(effects
@@ -1417,7 +1417,7 @@
 			(uuid "f7c26c3f-c45e-4bc0-a30e-990f55d1e0e8")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 270)
+			(at 1.27 -2.37 -90)
 			(layer "F.Fab")
 			(uuid "fbac9e43-7267-44c9-b422-fe80d8a971b1")
 			(effects
@@ -1477,7 +1477,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 2.5 2.5 270)
+			(at 2.5 2.5 -90)
 			(layer "F.Fab")
 			(uuid "fa0ed695-77e0-4b8a-944e-0a067bd0ffb7")
 			(effects
@@ -1669,7 +1669,7 @@
 			(uuid "c441c67f-d6eb-4941-b013-0e09aefcceaf")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 270)
+			(at 2.5 0 -90)
 			(layer "F.Fab")
 			(uuid "8737c0d8-8547-46b9-89a4-0bffcf1d75c8")
 			(effects
@@ -2217,7 +2217,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW8"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "547cd5d6-ec9a-4fb3-a0c4-64133c6a5b52")
 			(effects
@@ -2228,7 +2228,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "c486b8b0-bacc-4113-968b-c9e603fbcaea")
 			(effects
@@ -2500,7 +2500,7 @@
 			(uuid "d7d3d7c6-f46b-4c95-81ba-91816a50193e")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "a468e2b1-a2e9-43c5-b8e5-0fc53391b116")
 			(effects
@@ -3163,7 +3163,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW5"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "f0086ccb-b4f5-49aa-aae3-4cf5b79b4afa")
 			(effects
@@ -3174,7 +3174,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "47f04bd2-7e45-4d94-aabb-f39b2d21417d")
 			(effects
@@ -3446,7 +3446,7 @@
 			(uuid "606f45fe-dc46-494c-bcfc-f38b3e16d73a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "157db45e-0469-4b3e-aec4-b32e50125814")
 			(effects
@@ -4054,7 +4054,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "bc7b522d-9e11-43c5-b33f-db12d230a70f")
 			(effects
@@ -4326,7 +4326,7 @@
 			(uuid "d1745816-edac-4c40-99e4-a0e294075903")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "fc214b3a-124d-4cb2-b43b-4a86fe042e3d")
 			(effects
@@ -4399,7 +4399,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW2"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "7907ceea-4829-4ed4-ace7-05193f2a4aeb")
 			(effects
@@ -4410,7 +4410,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "5beba369-95e7-4a05-a053-5da92d6776b1")
 			(effects
@@ -4682,7 +4682,7 @@
 			(uuid "812bbee2-1039-4652-86b4-c17a377945f1")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "721008a4-6f0a-42e4-8514-96c499dd2620")
 			(effects
@@ -7199,7 +7199,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 360)
+			(at 1.27 2.37 0)
 			(layer "F.Fab")
 			(uuid "54e13ab1-a613-4048-bd1a-44b9eee4f895")
 			(effects
@@ -7333,7 +7333,7 @@
 			(uuid "8450739e-c135-4d0a-adcf-e9e4793ca275")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 360)
+			(at 1.27 -2.37 0)
 			(layer "F.Fab")
 			(uuid "c8d21bd2-7451-459c-8562-87965075b967")
 			(effects
@@ -7576,7 +7576,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW3"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "37b602ec-0fa3-4027-b0bb-295373bdbb46")
 			(effects
@@ -7587,7 +7587,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "cfc34b3e-b9a3-4b11-9390-7554197ebf7f")
 			(effects
@@ -7859,7 +7859,7 @@
 			(uuid "d9b56a13-e76b-4fe0-8fae-551d0d9c35fd")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "51b5b3ca-b3d9-4d55-aed1-d82145210097")
 			(effects
@@ -7943,7 +7943,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 2.5 2.5 270)
+			(at 2.5 2.5 -90)
 			(layer "F.Fab")
 			(uuid "92f45897-2e92-4f4a-bdfa-ad331db0a614")
 			(effects
@@ -8135,7 +8135,7 @@
 			(uuid "2cb2fc71-9fdf-4788-82ba-d3e3b0e613bf")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 270)
+			(at 2.5 0 -90)
 			(layer "F.Fab")
 			(uuid "b5b56794-af39-4256-9cb2-dd2d1ec7e93f")
 			(effects
@@ -9193,7 +9193,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW6"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "3ee84785-9bdc-498f-9ba5-977d0d9a6658")
 			(effects
@@ -9204,7 +9204,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "b6135a67-a5d7-4ec4-97f5-500f9b244c91")
 			(effects
@@ -9476,7 +9476,7 @@
 			(uuid "24eb7303-c2e7-4cf6-8110-c2c0b1fb3881")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "ce1df7fe-df5e-463c-a687-48670db5ebff")
 			(effects
@@ -9697,7 +9697,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 2.5 2.5 270)
+			(at 2.5 2.5 -90)
 			(layer "F.Fab")
 			(uuid "2ef526ef-18c2-4687-b05b-34d7e5126747")
 			(effects
@@ -9889,7 +9889,7 @@
 			(uuid "0d786d76-af00-4dab-8bb3-60c7ab12e94f")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 270)
+			(at 2.5 0 -90)
 			(layer "F.Fab")
 			(uuid "250ffb17-9691-417b-963c-e1fa02d543cd")
 			(effects
@@ -10591,7 +10591,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW4"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "125495c8-2700-41cf-97e4-d499106bc09c")
 			(effects
@@ -10602,7 +10602,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "5a9a417a-6471-4c25-ab65-5d01fb19adec")
 			(effects
@@ -10874,7 +10874,7 @@
 			(uuid "ab2127c0-4a72-4a2a-87ed-e20c6ae403af")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "e740cc13-91d1-46da-85e7-15ce4114c9c1")
 			(effects
@@ -11462,7 +11462,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 360)
+			(at 1.27 2.37 0)
 			(layer "F.Fab")
 			(uuid "636e99e1-b92a-476e-bbf5-3193233c3e4e")
 			(effects
@@ -11596,7 +11596,7 @@
 			(uuid "f4c0ae75-5451-4d60-8714-5425efb1d7f6")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 360)
+			(at 1.27 -2.37 0)
 			(layer "F.Fab")
 			(uuid "5f5525a4-ca2f-449b-9ec2-1b4392062684")
 			(effects
@@ -11645,7 +11645,7 @@
 		(descr "Resistor, Axial_DIN0207 series, Axial, Vertical, pin pitch=2.54mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Vertical pin pitch 2.54mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R1"
-			(at -2.287 -0.012 360)
+			(at -2.287 -0.012 0)
 			(layer "F.SilkS")
 			(uuid "da83affe-1f72-4168-a99c-2b23eb30c244")
 			(effects
@@ -11656,7 +11656,7 @@
 			)
 		)
 		(property "Value" "6.8k"
-			(at 1.27 2.37 270)
+			(at 1.27 2.37 -90)
 			(layer "F.Fab")
 			(uuid "50f3b81a-7de4-4ff8-ae0c-3234f78261e2")
 			(effects
@@ -11790,7 +11790,7 @@
 			(uuid "4e94ac37-878a-4207-8972-fe03cd5bf62f")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 270)
+			(at 1.27 -2.37 -90)
 			(layer "F.Fab")
 			(uuid "3f19725d-a220-478f-99b6-8aa577620ac4")
 			(effects
@@ -12111,7 +12111,7 @@
 		(descr "Resistor, Axial_DIN0207 series, Axial, Vertical, pin pitch=2.54mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Vertical pin pitch 2.54mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R12"
-			(at 5.08 0 360)
+			(at 5.08 0 0)
 			(layer "F.SilkS")
 			(uuid "c8515137-d9d8-475f-ada2-546eb592be7d")
 			(effects
@@ -12122,7 +12122,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 360)
+			(at 1.27 2.37 0)
 			(layer "F.Fab")
 			(uuid "5a4241b3-4f5c-4b49-acb0-c6f1a521368c")
 			(effects
@@ -12256,7 +12256,7 @@
 			(uuid "219c271b-59b0-4f8b-bb52-d51882988278")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 360)
+			(at 1.27 -2.37 0)
 			(layer "F.Fab")
 			(uuid "e0c9f1d4-5c13-4c6f-bbfe-e0e382cf0a28")
 			(effects
@@ -12804,7 +12804,7 @@
 		(descr "16-lead though-hole mounted DIP package, row spacing 7.62 mm (300 mils), Socket")
 		(tags "THT DIP DIL PDIP 2.54mm 7.62mm 300mil Socket")
 		(property "Reference" "U3"
-			(at 0 -2.276 270)
+			(at 0 -2.276 -90)
 			(layer "F.SilkS")
 			(uuid "f73d2b7b-89b4-489e-a039-2bae72ae8f41")
 			(effects
@@ -12815,7 +12815,7 @@
 			)
 		)
 		(property "Value" "74HC4051"
-			(at 3.81 20.11 270)
+			(at 3.81 20.11 -90)
 			(layer "F.Fab")
 			(uuid "cba77524-7fdf-4807-990d-944db8d090e3")
 			(effects
@@ -13098,7 +13098,7 @@
 			(uuid "4cc28f59-9b62-4c7d-908d-5aca0678d226")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.81 8.89 270)
+			(at 3.81 8.89 -90)
 			(layer "F.Fab")
 			(uuid "a72e4c49-371f-4a99-9c68-1b273b2c8ff9")
 			(effects
@@ -13645,7 +13645,7 @@
 			)
 		)
 		(property "Value" "PEC12R-3220F-S0024"
-			(at 7.5 11 270)
+			(at 7.5 11 -90)
 			(layer "F.Fab")
 			(uuid "9a4fb569-fce7-4888-9007-465fd91aa9e1")
 			(effects
@@ -14510,7 +14510,7 @@
 			)
 		)
 		(property "Value" "50k"
-			(at -2.54 3.67 360)
+			(at -2.54 3.67 0)
 			(layer "F.Fab")
 			(uuid "a29f81d0-6feb-4d97-b748-9623c82f363f")
 			(effects
@@ -14713,7 +14713,7 @@
 			(uuid "44be377a-cf84-4a7b-af18-6e9f33179314")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -3.175 0.005 360)
+			(at -3.175 0.005 0)
 			(layer "F.Fab")
 			(uuid "ddc6d9f8-4235-4a92-bcd4-81179ff0cd50")
 			(effects
@@ -14775,7 +14775,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW1"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "d5eb634b-1942-432c-8ecd-cc8a887b17fe")
 			(effects
@@ -14786,7 +14786,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "d19e4a2e-e650-4b01-8db6-8947e04c06f1")
 			(effects
@@ -15058,7 +15058,7 @@
 			(uuid "55566198-d236-4c16-9cdf-0cc0d261d542")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "8df1a253-5e55-4972-bf56-d468e997bc22")
 			(effects
@@ -15394,7 +15394,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 270)
+			(at 1.27 2.37 -90)
 			(layer "F.Fab")
 			(uuid "c0c525fc-c532-49f0-aeb8-68c7e1ea16cc")
 			(effects
@@ -15528,7 +15528,7 @@
 			(uuid "18397ee7-7100-4422-854e-ecda94107bfa")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 270)
+			(at 1.27 -2.37 -90)
 			(layer "F.Fab")
 			(uuid "880b39e5-2960-4b47-b28b-cc98096a59b2")
 			(effects
@@ -15897,7 +15897,7 @@
 		(descr "Resistor, Axial_DIN0207 series, Axial, Vertical, pin pitch=2.54mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Vertical pin pitch 2.54mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R2"
-			(at -2.287 0.05 360)
+			(at -2.287 0.05 0)
 			(layer "F.SilkS")
 			(uuid "a0d950cb-d32a-45ee-a0d0-cf1cfd28d94e")
 			(effects
@@ -15908,7 +15908,7 @@
 			)
 		)
 		(property "Value" "6.8k"
-			(at 1.27 2.37 270)
+			(at 1.27 2.37 -90)
 			(layer "F.Fab")
 			(uuid "8eddd550-255e-4936-8fcd-ec15a9d68d72")
 			(effects
@@ -16042,7 +16042,7 @@
 			(uuid "0aa1a116-eae9-459b-93a8-f285b2cb9dff")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 270)
+			(at 1.27 -2.37 -90)
 			(layer "F.Fab")
 			(uuid "c1b2c0b3-b5e8-45a6-ae4e-b0ea130b6845")
 			(effects
@@ -16091,7 +16091,7 @@
 		(descr "Resistor, Axial_DIN0207 series, Axial, Vertical, pin pitch=2.54mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Vertical pin pitch 2.54mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R11"
-			(at -2.45 0 360)
+			(at -2.45 0 0)
 			(layer "F.SilkS")
 			(uuid "163bad76-f8a5-48e2-93a0-c5e6d7357418")
 			(effects
@@ -16102,7 +16102,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 270)
+			(at 1.27 2.37 -90)
 			(layer "F.Fab")
 			(uuid "a61f8f15-5343-4fea-9004-b7dab5b3bdfb")
 			(effects
@@ -16236,7 +16236,7 @@
 			(uuid "925be8f8-5158-4cdc-8b42-f3a9a7181ae3")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 270)
+			(at 1.27 -2.37 -90)
 			(layer "F.Fab")
 			(uuid "3340508c-8aef-4797-b1e2-fe612f617333")
 			(effects
@@ -16605,7 +16605,7 @@
 		(descr "14-lead though-hole mounted DIP package, row spacing 7.62 mm (300 mils), Socket")
 		(tags "THT DIP DIL PDIP 2.54mm 7.62mm 300mil Socket")
 		(property "Reference" "U6"
-			(at 2.286 -0.233 360)
+			(at 2.286 -0.233 0)
 			(layer "F.SilkS")
 			(uuid "7d3efd38-12d8-499f-a003-16deebf6dc51")
 			(effects
@@ -16616,7 +16616,7 @@
 			)
 		)
 		(property "Value" "TL074"
-			(at 3.81 17.57 360)
+			(at 3.81 17.57 0)
 			(layer "F.Fab")
 			(uuid "60916c94-45a9-44e2-b184-594e8ac7c977")
 			(effects
@@ -16899,7 +16899,7 @@
 			(uuid "da5c4af0-c911-40b0-8fae-3891b36bd175")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.81 7.62 360)
+			(at 3.81 7.62 0)
 			(layer "F.Fab")
 			(uuid "305d6566-3faa-48db-9500-e95490cccf5b")
 			(effects
@@ -17089,7 +17089,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 270)
+			(at 1.27 2.37 -90)
 			(layer "F.Fab")
 			(uuid "e4578706-0964-4e90-a5be-f76428a3d8f6")
 			(effects
@@ -17223,7 +17223,7 @@
 			(uuid "34c50be2-bf4d-4f76-a990-8692d4b71623")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 270)
+			(at 1.27 -2.37 -90)
 			(layer "F.Fab")
 			(uuid "8a3a7d91-657e-4f55-8dbf-1980283749d9")
 			(effects
@@ -18124,7 +18124,7 @@
 			)
 		)
 		(property "Value" "50k"
-			(at -2.54 3.67 270)
+			(at -2.54 3.67 -90)
 			(layer "F.Fab")
 			(uuid "2a8450a6-00d6-4652-8b22-67dfacac8d0d")
 			(effects
@@ -18327,7 +18327,7 @@
 			(uuid "cdd17d4f-19b5-423e-b60d-89f5e914d99a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -3.175 0.005 270)
+			(at -3.175 0.005 -90)
 			(layer "F.Fab")
 			(uuid "f1a95a32-e8dd-471e-a35e-e78959f747d9")
 			(effects
@@ -20085,7 +20085,7 @@
 			)
 		)
 		(property "Value" "50k"
-			(at -2.54 3.67 360)
+			(at -2.54 3.67 0)
 			(layer "F.Fab")
 			(uuid "5a558155-d0c2-414b-b232-3b1c185133ff")
 			(effects
@@ -20288,7 +20288,7 @@
 			(uuid "49f04da3-a361-4bfd-ba43-fef80fbcf52c")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -3.175 0.005 360)
+			(at -3.175 0.005 0)
 			(layer "F.Fab")
 			(uuid "41e22a31-7909-497e-9ef9-0279a235b2ad")
 			(effects
@@ -20361,7 +20361,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 2.5 2.5 360)
+			(at 2.5 2.5 0)
 			(layer "F.Fab")
 			(uuid "e460a833-b4ec-43d5-bc5a-e487689d10b5")
 			(effects
@@ -20553,7 +20553,7 @@
 			(uuid "3c9c2a60-1922-4fbf-967f-ca1275aa1f58")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 360)
+			(at 2.5 0 0)
 			(layer "F.Fab")
 			(uuid "a39c3392-10af-4407-a0fb-c800ff4800d9")
 			(effects
@@ -21242,7 +21242,7 @@
 		(descr "Resistor, Axial_DIN0207 series, Axial, Vertical, pin pitch=2.54mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Vertical pin pitch 2.54mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R14"
-			(at 5.08 0.254 360)
+			(at 5.08 0.254 0)
 			(layer "F.SilkS")
 			(uuid "a732de8d-9fd6-49d1-b751-864c4ade44ee")
 			(effects
@@ -21253,7 +21253,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 1.27 2.37 360)
+			(at 1.27 2.37 0)
 			(layer "F.Fab")
 			(uuid "ae63b852-ba0a-4d3c-87df-cf579e35cef6")
 			(effects
@@ -21387,7 +21387,7 @@
 			(uuid "dca2ed66-2e73-44ac-bd3f-3459c1122de3")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 360)
+			(at 1.27 -2.37 0)
 			(layer "F.Fab")
 			(uuid "3902b631-645c-415c-98a8-3292d64613a7")
 			(effects
@@ -21436,7 +21436,7 @@
 		(descr "tactile push button, 6x6mm e.g. PHAP33xx series, height=5mm")
 		(tags "tact sw push 6mm")
 		(property "Reference" "SW7"
-			(at 3.25 -2 270)
+			(at 3.25 -2 -90)
 			(layer "F.SilkS")
 			(uuid "b5f481e4-1eba-44ca-8d41-d2e3470f0abf")
 			(effects
@@ -21447,7 +21447,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "3059da2f-6f82-4594-a248-a1336d9d8d39")
 			(effects
@@ -21719,7 +21719,7 @@
 			(uuid "a3167636-0b92-402d-9f37-c7616b621308")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "b2360c5f-7b7c-461b-bf88-0f18247eb062")
 			(effects
@@ -21803,7 +21803,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 3.75 6.7 270)
+			(at 3.75 6.7 -90)
 			(layer "F.Fab")
 			(uuid "c2819c83-e860-4fab-b95b-ae7407ed7171")
 			(effects
@@ -22075,7 +22075,7 @@
 			(uuid "bc00604e-7d42-4f11-8ece-d238f7312be0")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 2.25 270)
+			(at 3.25 2.25 -90)
 			(layer "F.Fab")
 			(uuid "011043ce-df60-4d34-9923-e663f57a9894")
 			(effects
@@ -22720,7 +22720,7 @@
 		(descr "module CMS SOT223 4 pins")
 		(tags "CMS SOT")
 		(property "Reference" "U7"
-			(at 3.302 -3.048 360)
+			(at 3.302 -3.048 0)
 			(layer "F.SilkS")
 			(uuid "fd249a16-2237-4d7e-9025-00def6733505")
 			(effects
@@ -22731,7 +22731,7 @@
 			)
 		)
 		(property "Value" "TLV1117-33"
-			(at 0 4.5 360)
+			(at 0 4.5 0)
 			(layer "F.Fab")
 			(uuid "e4d54e85-9717-4be1-861c-37c36cce4f6b")
 			(effects
@@ -23247,7 +23247,7 @@
 		(descr "Through hole straight pin header, 2x06, 2.54mm pitch, double rows")
 		(tags "Through hole pin header THT 2x06 2.54mm double row")
 		(property "Reference" "J6"
-			(at 1.27 -2.33 360)
+			(at 1.27 -2.33 0)
 			(layer "F.SilkS")
 			(uuid "fae029d0-8f1e-4f4c-958b-748720197e3d")
 			(effects
@@ -23258,7 +23258,7 @@
 			)
 		)
 		(property "Value" "Conn_02x06_Odd_Even"
-			(at 1.27 15.03 360)
+			(at 1.27 15.03 0)
 			(layer "F.Fab")
 			(uuid "197061d0-b760-45ca-acb9-86e50938f235")
 			(effects
@@ -23911,7 +23911,7 @@
 		(descr "C, Disc series, Radial, pin pitch=5.00mm, , diameter*width=5*2.5mm^2, Capacitor, http://cdn-reichelt.de/documents/datenblatt/B300/DS_KERKO_TC.pdf")
 		(tags "C Disc series Radial pin pitch 5.00mm  diameter 5mm width 2.5mm Capacitor")
 		(property "Reference" "C4"
-			(at 2.54 0 360)
+			(at 2.54 0 0)
 			(layer "F.SilkS")
 			(uuid "f44323a5-a5c5-4536-b8d0-0717b5802f1c")
 			(effects
@@ -23922,7 +23922,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 2.5 2.5 360)
+			(at 2.5 2.5 0)
 			(layer "F.Fab")
 			(uuid "a9992926-2ede-4b7c-bbbc-3dae21a7ce75")
 			(effects
@@ -24114,7 +24114,7 @@
 			(uuid "3103ebff-3f52-48a9-9ada-c3b11ced2021")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 360)
+			(at 2.5 0 0)
 			(layer "F.Fab")
 			(uuid "710011fe-41ac-4775-a143-cd9f97d57eb0")
 			(effects
@@ -34316,8 +34316,6 @@
 		(fill
 			(thermal_gap 0.5)
 			(thermal_bridge_width 0.5)
-			(smoothing fillet)
-			(radius 0.5)
 		)
 		(polygon
 			(pts
@@ -34348,8 +34346,6 @@
 		(fill
 			(thermal_gap 0.5)
 			(thermal_bridge_width 0.5)
-			(smoothing fillet)
-			(radius 0.5)
 		)
 		(polygon
 			(pts

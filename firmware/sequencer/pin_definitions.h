@@ -44,8 +44,8 @@
 #define PAX_MUX_ADDR1 22
 #define PAX_MUX_ADDR2 23
 
-//////////////// ITSY BITSY M0 (SAMD21) and M4 (SAMD51) ///////////////////////
-#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS) || defined(ADAFRUIT_ITSYBITSY_M0) 
+//////////////// ITSY BITSY M4 (SAMD51) ///////////////////////
+#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
 
 #define PIN_CV_DAC_OUT PIN_DAC0  // A0/D14
 // pin D15-D17 are not used
@@ -53,8 +53,8 @@
 #define PIN_SYNC_IN 19
 #define PIN_SYNC_OUT 24
 
-#define PIN_MODE_BUTTON 25
-#define PIN_RUN_STOP_BUTTON 23
+#define PIN_MODE_BUTTON 23
+#define PIN_RUN_STOP_BUTTON 25
 
 #define PIN_GATE_OUT 2
 

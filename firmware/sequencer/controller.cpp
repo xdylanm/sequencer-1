@@ -30,7 +30,8 @@ bool Controller::tick(MachineState& state)
           slide_.D += 2*slide_.dx;
           slide_.y += slide_.dir;
         }
-        slide_.D += 2*slide_.dx;
+        slide_.y += slide_.dir;
+        slide_.D += 2*(slide_.dx - slide_.dy);
       } else {
         if (slide_.D > 0) {
           slide_.y += slide_.dir;
@@ -62,6 +63,7 @@ void Controller::update_parameters(MachineState const& state)
     tpi_ = (60 * ft + (b / 2)) / b; // rounded integer division
     if (tpi_ != old_tpi) {
       mi_ = (tpi_ * mi_ + (old_tpi / 2)) / old_tpi;
+      slide_tpi_ = tpi_ - (tpi_ * seq_params_.slide_pct + 50) / 100;  // rounded integer divsion   
       update_slide = true;
     }
     seq_params_.bpm = b;
