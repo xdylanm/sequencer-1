@@ -11,6 +11,14 @@
 #include "seqdisplay.h"
 #include "controller.h"
 
+#if defined(ADAFRUIT_QTPY_M0)
+Adafruit_NeoPixel onboard_pixel(1, PIN_NEOPIXEL);
+#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS) || defined(ADAFRUIT_ITSYBITSY_M0)
+#include <Adafruit_DotStar.h>
+Adafruit_DotStar onboard_pixel(1, 8, 6, DOTSTAR_BGR);
+#endif
+
+
 using namespace samd_utils;
 
 // Display definitions
@@ -58,20 +66,16 @@ Controller engine;        // Engine to control the timing for the sequencer
 
 volatile int ch_ndx, next_ch_ndx;
 volatile bool update_npxls, update_display;
+volatile bool led_toggle;
+volatile int led_counter;
 
 // main timing for the engine comes from the conversion interrupts
 #if defined(__SAMD21__) 
-  void ADC_Handler() 
-#elif defined(__SAMD51__)
-  void ADC0_1_Handler() 
-#endif 
+void ADC_Handler() 
 {
   // process the ADC value & record the current step button state
-#if defined(__SAMD21__) 
   uint16_t const pot_val_raw = 0x0FFF & ADC->RESULT.reg;
-#elif defined(__SAMD51__)
-  uint16_t const pot_val_raw = 0x0FFF & ADC0->RESULT.reg;
-#endif
+
   // should be OK to switch the MUX in between: settle time << sample time
   // we need to re-purpose the flash control pins on the QtPY to have enough pins
 #if defined(ADAFRUIT_QTPY_M0) 
@@ -102,12 +106,46 @@ volatile bool update_npxls, update_display;
   ch_ndx = next_ch_ndx;
   next_ch_ndx = (next_ch_ndx + 1) % MAX_NUM_STEPS;
 
-#if defined(__SAMD21__) 
   ADC->INTFLAG.bit.RESRDY = 1;  // write a bit to clear interrupt
-#elif defined(__SAMD51__)
-  ADC0->INTFLAG.bit.RESRDY = 1;
-#endif
 }
+
+#elif defined(__SAMD51__)
+void ADC0_1_Handler() 
+{
+  // process the ADC value & record the current step button state
+  uint16_t const pot_val_raw = 0x0FFF & ADC0->RESULT.reg;
+
+  // should be OK to switch the MUX in between: settle time << sample time
+  // we need to re-purpose the flash control pins on the QtPY to have enough pins
+  int const step_key_raw = digitalRead(PIN_MUXD_STEP_BUTTON);          // active high
+  digitalWrite(addr_pins[mux_addr_gray_table[2*next_ch_ndx]], mux_addr_gray_table[2*next_ch_ndx + 1]);
+
+  // write the active CV & gate levels out
+
+  analogWrite(PIN_CV_DAC_OUT, engine.cv(seq_state));
+  digitalWrite(PIN_GATE_OUT, engine.gate(seq_state));
+
+  int const run_stop_raw = digitalRead(PIN_RUN_STOP_BUTTON);
+  int const mode_raw = digitalRead(PIN_MODE_BUTTON);
+  int const rot_sw_raw = digitalRead(PIN_ROT_SW);
+
+  update_npxls |= engine.tick(seq_state);
+  
+  seq_state.push(ch_ndx, pot_val_raw, step_key_raw);
+  uint8_t const res = seq_state.process_key_events(run_stop_raw, mode_raw, rot_sw_raw, rot_encoder.getPosition());
+  update_npxls |= (bool)(res & INVALIDATE_NPXLS);
+  update_display |= (bool)(res & INVALIDATE_OLED);
+
+  engine.update_parameters(seq_state);
+
+  ch_ndx = next_ch_ndx;
+  next_ch_ndx = (next_ch_ndx + 1) % MAX_NUM_STEPS;
+
+  digitalWrite(LED_BUILTIN, 1);
+
+  ADC0->INTFLAG.bit.RESRDY = 1;
+}
+#endif
 
 // ISR for the encoder pins -- call tick on any change
 void check_position() 
@@ -115,18 +153,22 @@ void check_position()
   rot_encoder.tick();
 }
 
-void error_blink(int i) {
-  while (1) {
-      status_pixels.setPixelColor(i, status_pixels.Color(64, 0, 0));
-      status_pixels.show();
-      delay(200);
-      status_pixels.clear();
-      status_pixels.show();
-      delay(400);
-  }
-}
+void invalidate_npxls();
+void invalidate_display();
+void error_blink(int i);
+void ok_blink();
 
 void setup() {
+
+  onboard_pixel.begin(); // Initialize pins for output
+  onboard_pixel.setBrightness(80);
+  onboard_pixel.show();  // Turn all LEDs off ASAP
+  
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(LED_BUILTIN, OUTPUT);
+  led_toggle = false;
+  led_counter = 0;
+
   Serial.begin(115200);
 
   pinMode(PIN_CV_DAC_OUT, OUTPUT);
@@ -157,6 +199,12 @@ void setup() {
   digitalWrite(PIN_MUX_ADDR2,0);
 #endif
 
+  if (!display.begin()) {
+    Serial.println("Display initialization failed");
+    error_blink(-1);
+  }
+  ok_blink();
+
   gclk::init(adc_config.gclk_id, adc_config.clk_div, adc_config.clk_divsel);
 
   adc::init_iopin_in(adc_config.adc_iopin, adc_config.adc_port);
@@ -165,11 +213,6 @@ void setup() {
 
   analogWriteResolution(DAC_NUM_BITS);  // 10 bit or 12 bit DAC from board_target.h
   
-  if (!display.begin()) {
-    Serial.println("Display initialization failed");
-    error_blink(0);
-  }
-  delay(500);
   for (int i = 0; i < 13; ++i) {
     display.display_title("SEQUENCER-1", i);
     delay(50);
@@ -195,7 +238,8 @@ void setup() {
   display.clear_all();
 
   seq_state.set_rotary_position(rot_encoder.getPosition());
-    // register interrupt routine for rotary encoder
+  
+  // register interrupt routine for rotary encoder
   attachInterrupt(digitalPinToInterrupt(PIN_ROT_IN1), check_position, CHANGE);
   attachInterrupt(digitalPinToInterrupt(PIN_ROT_IN2), check_position, CHANGE);
   
@@ -205,32 +249,49 @@ void setup() {
   seq_state.tick_freq(2000);
   engine.update_parameters(seq_state);
 
-  update_npxls = true;
-  update_display = true;  // one shot
+  analogWrite(PIN_CV_DAC_OUT, 0);
 
+  invalidate_npxls();
+  invalidate_display();
+  
   adc::start();
+
 }
 
 void loop() 
 {
+  digitalWrite(LED_BUILTIN, LOW);
 
   if (update_npxls) {
     update_npxls = false;
-    for (int i = 0; i < MAX_NUM_STEPS; ++i) {
-      status_pixels.setPixelColor(i, seq_state.pixel_color(i));
-    }
-    status_pixels.show();
-
-    display.set_main_level_chart(8, seq_state.cv_buf(), seq_state.step_active_buf(), seq_state.step_enable_buf());
-    if (seq_state.running()) {
-      display.set_main_level_bar(seq_state.current_step());
-    }
-    display.show();
+    invalidate_npxls();
   }
 
   if (update_display) {
-    
-    display.set_bpm(seq_state.bpm());
+    update_display = false;
+    invalidate_display();
+  }
+
+}
+
+
+void invalidate_npxls() 
+{
+  for (int i = 0; i < MAX_NUM_STEPS; ++i) {
+    status_pixels.setPixelColor(i, seq_state.pixel_color(i));
+  }
+  status_pixels.show();
+
+  display.set_main_level_chart(8, seq_state.cv_buf(), seq_state.step_active_buf(), seq_state.step_enable_buf());
+  if (seq_state.running()) {
+    display.set_main_level_bar(seq_state.current_step());
+  }
+  display.show();
+}
+
+void invalidate_display()
+{
+display.set_bpm(seq_state.bpm());
     display.set_duty(seq_state.duty_pct());
     display.set_slide(seq_state.slide_pct());
     
@@ -280,11 +341,38 @@ void loop()
     } else {
       display.select_top(seq_state.menu_state().active_menu_item);
     }
-
-    update_display = false;
-
     display.show();
+}
 
+void error_blink(int i) {
+
+  if (i < 0) {
+    while (1) {
+        onboard_pixel.setPixelColor(0, status_pixels.Color(64, 0, 0));
+        onboard_pixel.show();
+        delay(200);
+        onboard_pixel.clear();
+        onboard_pixel.show();
+        delay(400);
+    }  
+  } else {
+    while (1) {
+        status_pixels.setPixelColor(i, status_pixels.Color(64, 0, 0));
+        status_pixels.show();
+        delay(200);
+        status_pixels.clear();
+        status_pixels.show();
+        delay(400);
+    }
   }
+}
 
+void ok_blink()
+{
+  onboard_pixel.setPixelColor(0, onboard_pixel.Color(0, 64, 0));
+  onboard_pixel.show();
+  delay(200);
+  onboard_pixel.clear();
+  onboard_pixel.show();
+  delay(300);
 }

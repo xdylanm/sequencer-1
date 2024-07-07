@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Arduino.h>
 /*!
   \file pin_definitions.h
 
@@ -46,7 +47,7 @@
 //////////////// ITSY BITSY M0 (SAMD21) and M4 (SAMD51) ///////////////////////
 #elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS) || defined(ADAFRUIT_ITSYBITSY_M0) 
 
-#define PIN_CV_DAC_OUT 0  // A0/D14
+#define PIN_CV_DAC_OUT PIN_DAC0  // A0/D14
 // pin D15-D17 are not used
 // pin D18 is POT_MUX (PA04)
 #define PIN_SYNC_IN 19
@@ -73,7 +74,7 @@
 
 #define PIN_ROT_SW 12
 
-// D13 is not used
+// D13 is not used -- built-in LED
 
 // pin definitions for ADC found in adc_config, different for M0 & M4
 
