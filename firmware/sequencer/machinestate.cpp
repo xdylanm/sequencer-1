@@ -20,7 +20,7 @@ MachineState::MachineState()
 : quant_(Quantization::NONE), voct_range_(OutputRange::VOCT_1), pattern_(PatternMode::LOOP),
   step_button_mode_(StepButtonMode::STEP_ACTIVE), run_button_(32, SoftButton::ACTIVE_LOW), 
   mode_button_(32, SoftButton::ACTIVE_LOW), rotary_button_(32, SoftButton::ACTIVE_LOW), 
-  running_(false), tick_freq_(2000), bpm_(200), duty_pct_(50), slide_pct_(80), bounce_dir_(1),
+  running_(false), tick_freq_(2000), bpm_(120), duty_pct_(50), slide_pct_(0), bounce_dir_(1),
   r_state_(2), octave_shift_(0)
 {
 
