@@ -463,7 +463,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "keypad_1x4.kicad_pro",
+    "filename": "keypad_1x2.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -481,7 +481,7 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.254,
+        "track_width": 0.2,
         "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
@@ -509,7 +509,7 @@
     "netclass_patterns": [
       {
         "netclass": "Power",
-        "pattern": "+5V"
+        "pattern": "+*V"
       }
     ]
   },
@@ -518,7 +518,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "../plots/keypad_1x4/",
+      "plot": "../plots/keypad_1x2/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
@@ -642,7 +642,7 @@
   },
   "sheets": [
     [
-      "4a22a2cb-effc-42c9-9d1c-0138e78b8cf4",
+      "fa44db40-fe3e-404a-941c-ecee8460971a",
       "Root"
     ]
   ],
