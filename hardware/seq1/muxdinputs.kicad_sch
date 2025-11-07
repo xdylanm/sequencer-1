@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "Sequencer")
-		(date "2024-10-14")
-		(rev "1.1")
+		(date "2025-11-07")
+		(rev "2.0")
 		(company "idyllm")
 		(comment 1 "CC BY-SA 4.0")
 	)
