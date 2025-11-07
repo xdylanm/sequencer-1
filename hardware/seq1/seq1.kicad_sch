@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "8ddbd4cb-c9ed-4e84-b41b-81a0645f4a34")
 	(paper "USLetter")
 	(title_block
@@ -16,6 +16,10 @@
 	(sheet
 		(at 21.59 125.73)
 		(size 62.23 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -54,6 +58,10 @@
 	(sheet
 		(at 21.59 153.67)
 		(size 62.23 34.29)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -92,6 +100,10 @@
 	(sheet
 		(at 97.79 125.73)
 		(size 58.42 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -130,6 +142,10 @@
 	(sheet
 		(at 105.41 71.12)
 		(size 40.64 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -168,6 +184,10 @@
 	(sheet
 		(at 25.4 71.12)
 		(size 59.69 34.29)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -208,4 +228,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )
