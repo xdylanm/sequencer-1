@@ -3,10 +3,10 @@
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "acd0f03d-8e48-47fd-ab58-af7fd307e853")
-	(paper "A4")
+	(paper "USLetter")
 	(title_block
 		(title "Sequencer")
-		(date "2025-11-07")
+		(date "2025-12-28")
 		(rev "2.0")
 		(company "idyllm")
 		(comment 1 "CC BY-SA 4.0")

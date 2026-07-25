@@ -1,6 +1,6 @@
 # Sequencer One
 
-An open sequencer platform based on common components in the Eurorack format. 
+An open sequencer platform based on common components in the Eurorack format.
 
 * Module size: 36HP (182.9mm)
 * Power:  (+12V);  (-12V); (+5V)
@@ -11,9 +11,12 @@ An open sequencer platform based on common components in the Eurorack format.
 
 ## Features
 
-The module is implemented around the [ItsyBitsy M4](https://www.adafruit.com/product/3800) with a SAMD51 core, but can also use the [ItsyBitsy M0](https://www.adafruit.com/product/3727) (SAMD21 core). These development boards are reasonably low cost and have an accessible development ecosystem (Arduino or CircuitPython).
+Inspired by the [Korg SQ-1](https://www.korg.com/us/products/dj/sq_1/), the guiding ideas are
 
-The interface is modeled after the [Korg SQ-1](https://www.korg.com/us/products/dj/sq_1/), featuring
+* tactile inputs for each of the steps, minimize menu/config.
+* build it with hobby parts (breadboard compatible), stick to the SAMD21/SAMD51 families.
+
+The module is implemented around the [ItsyBitsy M4](https://www.adafruit.com/product/3800) with a SAMD51 core, but can also use the [ItsyBitsy M0](https://www.adafruit.com/product/3727) (SAMD21 core). These development boards are reasonably low cost and have an accessible development ecosystem (Arduino or CircuitPython).
 
 * up to 16 steps with level potentiometers for each step
 * run/pause and mode buttons to enable direct configuration
@@ -25,11 +28,9 @@ This interface should enable many variations on sequencing, including quantizati
 
 ## Documentation
 
-[Design](theory.md)
-
-[Assembly Guide](assembly.md)
-
-[Schematic](assets/schematic.pdf)
+* [Design](theory.md)
+* [Assembly Guide](assembly.md)
+* [Schematic](assets/schematic.pdf)
 
 ## References / Inspiration
 

@@ -2423,6 +2423,15 @@
 				(hide yes)
 			)
 		)
+		(property "PN" "IN-PI22TAT5R5G5B, Adafruit-3484"
+			(at 163.83 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "6e7777f9-fc33-4b36-b64f-6f70906277bf")
 		)
@@ -2961,6 +2970,15 @@
 				(hide yes)
 			)
 		)
+		(property "PN" "IN-PI22TAT5R5G5B, Adafruit-3484"
+			(at 181.61 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "6e5e518f-612c-45e4-b42b-f11cb5d9a8ee")
 		)
@@ -3194,6 +3212,15 @@
 				(hide yes)
 			)
 		)
+		(property "PN" "IN-PI22TAT5R5G5B, Adafruit-3484"
+			(at 146.05 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1c548749-906c-4560-bdb3-6e502e1d2bb3")
 		)
@@ -3262,6 +3289,15 @@
 			)
 		)
 		(property "Description" "RGB LED with integrated controller"
+			(at 128.27 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "PN" "IN-PI22TAT5R5G5B, Adafruit-3484"
 			(at 128.27 83.82 0)
 			(effects
 				(font
