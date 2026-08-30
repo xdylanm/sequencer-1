@@ -78,6 +78,8 @@ sym-lib-table
 fp-lib-table
 \#auto_saved_files\#
 
+plots/
+
 # Autorouter files (exported from Pcbnew)
 *.dsn
 *.ses

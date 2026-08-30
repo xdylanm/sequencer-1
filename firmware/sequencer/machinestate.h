@@ -69,6 +69,10 @@ public:
 
   TopMenuState const& menu_state() const { return menu_state_; }
 
+  uint16_t const* cv_buf() const { return cv_; }
+  uint8_t const* step_active_buf() const { return step_active_; }
+  uint8_t const* step_enable_buf() const { return step_enable_; }
+
 private:
 
   TopMenuState menu_state_;
